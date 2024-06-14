@@ -1,0 +1,85 @@
+body.dark-mode {
+    background-color: #121212;
+    color: #fff;
+  }
+  
+  .sidebar.dark-mode {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    border: 3px solid var(--color-primary) !important;
+  }
+  
+  .nav-link.dark-mode {
+    color: #fff;
+  }
+  
+  .nav-link.dark-mode.active,
+  .nav-link.dark-mode:hover {
+    background-color: #333;
+    color: var(--color-primary) !important;
+  }
+  
+  .nav-link.dark-mode.active i,
+  .nav-link.dark-mode:hover i {
+    color: var(--color-primary);
+  }
+  
+  #home.dark-mode h1,
+  #about.dark-mode h2, 
+  #about.dark-mode i,
+  #about.dark-mode .feature-description {
+    color: var(--color-primary) !important;
+  }
+  
+  #about.dark-mode .feature-title {
+    color: #1f1f1f;
+  }
+  
+  #home.dark-mode,
+  #about.dark-mode,
+  #contact.dark-mode,
+  footer.dark-mode {
+    border: 3px solid var(--color-primary);
+  }
+  
+  #home.dark-mode .ping {
+    background-color: var(--color-primary);
+  }
+  
+  #contact.dark-mode .logo-img, 
+  #contact.dark-mode .align-middle {
+    color: var(--color-primary) !important;
+  }
+  
+  #contact.dark-mode button {
+    background-color: var(--color-primary);
+  }
+  
+  .full-height.dark-mode {
+    background-color: #1f1f1f !important;
+    color: #fff;
+  }
+  
+  .feature-box.dark-mode {
+    background-color: #333;
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+  }
+  
+  footer.dark-mode {
+    background-color: #1f1f1f !important;
+  }
+  
+  footer.dark-mode p {
+    color: #fff;
+  }
+  
+  footer.dark-mode p span {
+    color: var(--color-primary) !important;
+  }
+  
+  .text-brand.dark-mode {
+    color: #fff;
+  }
+  
+  

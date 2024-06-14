@@ -1,0 +1,152 @@
+:root {
+  --color-primary-rgb: 110, 0, 255;
+  --color-primary: rgb(var(--color-primary-rgb));
+  --color-accent-rgb: 0, 204, 255;
+  --color-accent: rgb(var(--color-accent-rgb));
+  --color-primary-dark: #5015a0;
+  --color-primary-admin: #157898;
+  --color-background: #eff6fc;
+  --color-surface: #fff;
+  --color-surface-muted: #eff0f0;
+  --color-text: #2a2a2a;
+  --color-text-disabled: #707070;
+  --color-subtitle: #404040;
+  --color-success: #0f5f23;
+  --color-error: #b00020;
+  --color-shadow: #0003;
+
+  --border-radius: 16px;
+
+  --shadow-params-screen: 0 5px 5px 5px rgba(var(--color-accent-rgb), 0.1);
+  --shadow-params: 0 2px 2px var(--color-shadow);
+  --shadow-params-hover: 0 4px 10px 5px var(--color-shadow);
+  --shadow-params-active: 0 4px 5px var(--color-shadow);
+}
+::-moz-selection,
+::selection {
+  color: var(--color-background);
+  background-color: var(--color-primary);
+}
+body {
+  background-color: var(--color-background);
+}
+body * {
+  color: var(--color-text);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12pt;
+}
+
+button {
+  cursor: pointer;
+}
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+}
+button,
+input,
+textarea {
+  margin: 2px 4px;
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  background-color: var(--color-surface);
+  border-color: var(--color-surface);
+  border-width: 2px;
+  border-style: solid;
+  outline: none;
+  box-shadow: var(--shadow-params);
+  color: var(--color-primary);
+
+  transition: color 0.05s ease-in, border-color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out,
+    transform 0.1s ease-out;
+}
+button:hover,
+input:hover,
+textarea:hover {
+  transform: translate(0, -2px);
+  background-color: var(--color-background);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-params-hover);
+}
+button:focus,
+input:focus,
+textarea:focus {
+  border-color: var(--color-primary);
+}
+
+button:active,
+input:active,
+textarea:active {
+  transform: translate(0, 0);
+  box-shadow: var(--shadow-params-active);
+}
+input:active,
+textarea:active {
+  background-color: var(--color-background);
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+button:active {
+  background-color: var(--color-primary);
+}
+button:active > i,
+button:active {
+  color: var(--color-surface);
+}
+input[type="checkbox"]:checked {
+  background-color: var(--color-primary);
+}
+
+button.colored,
+input.colored,
+textarea.colored {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-surface);
+}
+
+button.colored:hover,
+input.colored:hover,
+textarea.colored:hover {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+input.colored:focus,
+textarea.colored:focus {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+}
+input.colored:active,
+textarea.colored:active {
+  background-color: var(--color-surface);
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+button.colored:active {
+  background-color: var(--color-surface);
+}
+button.colored:active > i,
+button.colored:active {
+  color: var(--color-primary);
+}
+
+#liveAlertPlaceholder {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+  width: auto;
+  max-width: 300px;
+}
+#liveAlertPlaceholder .alert {
+  margin-bottom: 10px;
+}
+.alert-dismissible {
+  box-shadow: var(--shadow-params);
+}
+
+.alert-dismissible:hober {
+  box-shadow: var(--shadow-params-hover);
+}

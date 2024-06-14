@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Group</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="../common/styles/global.css" />
+    <link rel="stylesheet" href="../common/styles/sidebar.css" />
+    <link rel="stylesheet" href="../common/styles/screen.css" />
+
+    <link rel="stylesheet" href="./styles/membersContainer.css" />
+    <link rel="stylesheet" href="./styles/create.css" />
+  </head>
+
+  <body>
+    <div id="createGroupBox" class="screen">
+      <div id="groupInfo">
+        <img src="../assets/defaultProfile.webp" class="pfp" id="mypfp" />
+        <div id="groupNameBox">
+          <!-- div instead of form since I'm using ajax -->
+          <div>
+            <input id="groupName" name="groupName" placeholder="Group name" />
+            <button id="createButton" type="submit" class="colored">Create</button>
+          </div>
+        </div>
+      </div>
+      <div id="membersList">
+        <input id="searchMembers" class="colored" placeholder="Search members" />
+        <div id="membersContainer">
+          <termplate class="memberCard">
+            <input type="checkbox" id="__checkID__" />
+            <img src="../assets/defaultProfile.webp" class="pfp" />
+            <div class="name">Member name</div>
+          </termplate>
+        </div>
+      </div>
+    </div>
+    <div id="liveAlertPlaceholder"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+
+    <script src="../common/scripts/appendAlert.js"></script>
+
+    <script src="./scripts/memberCard.js"></script>
+    <script src="./scripts/create.js"></script>
+  </body>
+</html>

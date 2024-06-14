@@ -1,0 +1,154 @@
+:root {
+    --color-accent-rgb: 0, 204, 255;
+    --color-accent: rgb(var(--color-accent-rgb));
+    --color-primary-admin: #157898;
+    --color-background: #eff6fc;
+    --color-text: #333;
+    --color-primary-admin-dark: #0d4f6b;
+    /* --color-accent-dark: rgb(0, 153, 191); */
+    --color-background-dark: #1c1c1c;
+    --color-text-dark: #fff;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+body.dark-mode {
+    background-color: var(--color-background-dark);
+    color: var(--color-text-dark);
+}
+
+body.dark-mode .main-content {
+    background-color: #333;
+    border: 1px solid var(--color-accent);
+}
+
+body.dark-mode nav {
+    background-color: #333;
+    border: 1px solid var(--color-accent);
+}
+
+body.dark-mode nav .nav-item .nav-link,
+body.dark-mode nav .nav-item .nav-link.active i {
+    color: var(--color-accent) !important;
+}
+
+body.dark-mode nav .nav-item .nav-link:hover,
+body.dark-mode nav .nav-item .nav-link:hover i {
+    color: var(--color-accent) !important;
+}
+
+body.dark-mode .modal .modal-content {
+    background-color: #333;
+    border: 1px solid var(--color-accent);
+}
+
+body.dark-mode .modal .modal-content p,
+body.dark-mode .modal .modal-content h5,
+body.dark-mode .modal .modal-content label {
+    color: #fff !important;
+}
+
+body.dark-mode .theme-toggle {
+    color: var(--color-accent);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    font-family: sans-serif;
+    min-width: 400px;
+    background-color: #fff;
+    color: #000;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #157898;
+    color: #fff;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+table tbody tr.active-row {
+    font-weight: bold;
+    color: #157898;
+}
+
+body.dark-mode table {
+    background-color: #333;
+    color: #fff;
+}
+
+body.dark-mode table th {
+    background-color: #444;
+    color: var(--color-accent);
+}
+
+body.dark-mode table tbody tr:nth-of-type(even) {
+    background-color: #3a3a3a;
+}
+
+body.dark-mode table tbody tr.active-row {
+    color: var(--color-accent);
+}
+
+.dark-mode .table-scroll::-webkit-scrollbar-track {
+    background-color: var(--color-accent);
+}
+
+.dark-mode .table-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--color-accent);
+}
+
+body.dark-mode .form {
+    background-color: #333;
+    border: 1px solid var(--color-accent);
+}
+
+body.dark-mode .form input {
+    background: #444;
+    color: #fff;
+}
+
+body.dark-mode .form button.signin {
+    background-color: #444;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+}
+
+body.dark-mode .form .message a,
+body.dark-mode .form .signup a {
+    color: var(--color-accent);
+}
+
+body.dark-mode .theme-toggle {
+    color: var(--color-accent);
+}
+
+.theme-toggle {
+    cursor: pointer;
+}
+
+body.dark-mode .fa-lightbulb {
+    color: var(--color-accent);
+}
+
+.theme-toggle .fa-lightbulb {
+    color: #fff;
+}
+body.dark-mode .modal .modal-body {
+    color: #fff;
+}
+

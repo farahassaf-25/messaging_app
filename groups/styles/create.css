@@ -1,0 +1,53 @@
+#createGroupBox {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  overflow: scroll;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  gap: 20px;
+}
+@media (width < 800px) {
+  #createGroupBox {
+    flex-wrap: wrap !important;
+  }
+}
+#createGroupBox #groupInfo {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+#createGroupBox #groupNameBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#createGroupBox .pfp,
+#createGroupBox #mypfp {
+  border-radius: 50%;
+}
+#createGroupBox .pfp {
+  padding: 1px;
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-surface);
+}
+#createGroupBox #mypfp {
+  width: 180px;
+  height: 180px;
+  background-color: var(--color-surface);
+  box-shadow: 0 4px 10px 2px var(--color-shadow);
+}
+#createGroupBox #membersList {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  gap: 8px;
+  padding: 16px;
+  border-radius: var(--border-radius);
+}

@@ -1,0 +1,17 @@
+@media (width: 800px) {
+  #aboutGroupBox {
+    flex-direction: column;
+  }
+}
+#groupInfo {
+  flex: 1;
+  width: 100%;
+}
+#groupNameBox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+#groupNameBox > label {
+  flex: 1;
+}

@@ -1,0 +1,16 @@
+#membersContainer {
+  max-height: 60vh;
+  overflow: scroll;
+  min-width: 400px;
+  padding: 4px 8px;
+  background-color: var(--color-background);
+  border-radius: var(--border-radius);
+}
+#membersContainer .memberCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+
+  padding: 4px 8px;
+}
