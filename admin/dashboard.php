@@ -7,6 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -186,7 +189,7 @@
                         <header class="header d-flex justify-content-center align-items-center">
                             <div class="input-group">
                                 <form action="" method="GET" class="w-100">
-                                    <input class="form-control border rounded-pill" type="search" name="search" placeholder="Search User" id="searchInput">
+                                    <input class="form-control border rounded-pill" type="search" name="search" placeholder="Search Report by Id" id="searchInput">
                                 </form>
                             </div>
                         </header>
@@ -206,8 +209,8 @@
                                         <tr>
                                             <th><input type="checkbox" name="" id=""></th>
                                             <th>Id</th>
-                                            <th>Report From</th>
-                                            <th>Report About</th>
+                                            <th>Reporter Id</th>
+                                            <th>Reported Id</th>
                                             <th>View Report</th>
                                             <th>Delete</th>
                                         </tr>
@@ -437,7 +440,8 @@
                     <p>Are you sure you want to delete all users?</p>
                 </div>
                 <div class="modal-footer">
-                    <form method="POST">
+                    <form method="POST" action="dashboard.php">
+                        <input type="hidden" name="checkUsers" value="1">
                         <button type="submit" class="btn btn-danger" name="deleteAllUsers">Delete All</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </form>
@@ -445,6 +449,25 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="usersWithReportsFeedbackModal" tabindex="-1" aria-labelledby="usersWithReportsFeedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="usersWithReportsFeedbackModalLabel">Users with Reports or Feedback</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Some users have reports or feedback.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- Add Admin Modal  -->
@@ -487,10 +510,26 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="scripts/adminDashboard.js"></script>
     <script src="scripts/updateUser.js"></script>
     <script src="scripts/userManagement.js"></script>
     <script src="scripts/switch_mode.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#deleteAllUsersBtn').click(function() {
+                // Check if there are users with reports or feedback
+                var usersWithReportsFeedback = <?php echo $usersWithReportsFeedback ? 'true' : 'false'; ?>;
+                if (usersWithReportsFeedback) {
+                    $('#deleteAllUsersModal').modal('show');
+                } else {
+                    // Show alert or take appropriate action if no users with reports or feedback
+                    alert('No users with reports or feedback found.');
+                }
+            });
+        });
+    </script>
 
 </body>
 

@@ -151,9 +151,12 @@ $(document).ready(function() {
 
 
     var userIdToDelete = null;
+
+    // Handle delete user button click
     $('.deleteUserBtn').on('click', function() {
-        // var userId = $(this).data('user-id');
         userIdToDelete = $(this).data('user-id');
+        rowToDelete.remove(); // Store reference to the row
+
         var modal = $('#deleteConfirmationUserModal');
         var modalBody = modal.find('.modal-body');
 
@@ -165,22 +168,30 @@ $(document).ready(function() {
             type: 'GET',
             data: { userId: userIdToDelete },
             success: function(response) {
-                response = JSON.parse(response);
-                if (response.success) {
-                    var message = "This user ";
-                    if (response.hasReport && response.hasFeedback) {
-                        message += "has reports and feedback.";
-                    } else if (response.hasReport) {
-                        message += "has reports.";
-                    } else if (response.hasFeedback) {
-                        message += "has feedback.";
+                try {
+                    response = JSON.parse(response);
+                    if (response.success) {
+                        var message = "This user ";
+                        if (response.hasReport && response.hasFeedback) {
+                            message += "has reports and feedback.";
+                        } else if (response.hasReport) {
+                            message += "has reports.";
+                        } else if (response.hasFeedback) {
+                            message += "has feedback.";
+                        } else {
+                            message += "has no reports or feedback.";
+                            $('#confirmUserDeleteBtn').prop('disabled', false);
+                        }
+                        modalBody.text(message);
+
+                        // Show the modal
+                        modal.modal('show');
                     } else {
-                        message += "has no reports or feedback.";
-                        $('#confirmUserDeleteBtn').prop('disabled', false);
+                        modalBody.text('Error checking user status: ' + response.message);
                     }
-                    modalBody.text(message);
-                } else {
-                    modalBody.text('Error checking user status: ' + response.message);
+                } catch (e) {
+                    console.error('Parsing error:', e);
+                    modalBody.text('Unexpected response from the server');
                 }
             },
             error: function(xhr, status, error) {
@@ -190,6 +201,7 @@ $(document).ready(function() {
         });
     });
 
+    // Handle confirm delete button click
     $('#confirmUserDeleteBtn').on('click', function() {
         if (userIdToDelete) {
             $.ajax({
@@ -197,13 +209,23 @@ $(document).ready(function() {
                 type: 'POST',
                 data: { userId: userIdToDelete },
                 success: function(response) {
-                    response = JSON.parse(response);
-                    if (response.success) {
-                        alert('User deleted successfully.');
-                    } else {
-                        alert('Error deleting user: ' + response.message);
+                    try {
+                        response = JSON.parse(response);
+                        if (response.success) {
+                            // Remove the row from the table
+                            $('#user-' + userIdToDelete).remove();
+
+                            // Hide the modal
+                            $('#deleteConfirmationUserModal').modal('hide');
+                            rowToDelete.remove(); 
+                            // alert('User deleted successfully.');
+                        } else {
+                            alert('Error deleting user: ' + response.message);
+                        }
+                    } catch (e) {
+                        console.error('Parsing error:', e);
+                        alert('Unexpected response from the server');
                     }
-                    $('#deleteConfirmationModal').modal('hide');
                 },
                 error: function(xhr, status, error) {
                     console.error('Error deleting user:', status, error);
@@ -242,7 +264,8 @@ $(document).ready(function() {
                if (feedbackButtonClass) {
                    $('#user-' + feedbackId + ' .viewFeedbackBtn').addClass(feedbackButtonClass);
                }
-                            alert('Feedback deleted successfully.')
+                            alert('Feedback deleted successfully.');
+                            location.reload();
                         } else {
                             $('#feedbackContent').text('Failed to delete feedback: ' + response.message);
                         }
