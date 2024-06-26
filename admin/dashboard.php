@@ -1,3 +1,14 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 1) {
+    header("Location: login_admin.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

@@ -12,6 +12,17 @@
 </head>
 
 <body>
+    <?php
+    session_start();
+    if (isset($_SESSION['error_message'])) {
+        echo "<script>alert('" . $_SESSION['error_message'] . "');</script>";
+        unset($_SESSION['error_message']);
+    }
+    if (isset($_SESSION['success_message'])) {
+        echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
+        unset($_SESSION['success_message']);
+    }
+    ?>
     <div class="login-page">
         <div class="box">
             <div class="form">
@@ -28,18 +39,6 @@
                         </svg>
                         <h2>ConvoConnect</h2>
                     </div>
-
-                    <?php
-                    session_start();
-                    if (isset($_SESSION['error_message'])) {
-                        echo "<script>alert('" . $_SESSION['error_message'] . "');</script>";
-                        unset($_SESSION['error_message']);
-                    }
-                    if (isset($_SESSION['success_message'])) {
-                        echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
-                        unset($_SESSION['success_message']);
-                    }
-                    ?>
 
                     <input type="text" name="name" required placeholder="Enter Your Name" autocomplete="off" />
                     <input type="email" name="email" required placeholder="Enter Your Email" autocomplete="off" />

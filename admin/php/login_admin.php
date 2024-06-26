@@ -3,6 +3,8 @@ session_start();
 
 include_once "../../common/php/authentication.php";
 
+$errors = [];
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];

@@ -2,7 +2,7 @@
 
 include_once "../common/php/authentication.php";
 
-session_start();
+// session_start();
 
 // Search functionality
 // $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';

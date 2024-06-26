@@ -10,8 +10,9 @@ class UserSimple
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException("Invalid email address: $email");
         }
+        // Remove the URL validation here since it will be handled in the derived class
         $this->email = $email;
-        $this->imageURL = filter_var($imageURL, FILTER_VALIDATE_URL) ? $imageURL : null;
+        $this->imageURL = $imageURL;
     }
 
     static function fromObject($object)
@@ -43,24 +44,18 @@ class User extends UserSimple
             throw new InvalidArgumentException("Invalid user creation date format");
         }
 
+        // Construct correct imageURL for local uploads if it's not an absolute URL
+        if (!empty($imageURL) && !filter_var($imageURL, FILTER_VALIDATE_URL)) {
+            $baseURL = getBaseURL();
+            $imageURL = rtrim($baseURL, '/') . '/' . ltrim($imageURL, '/');
+        }
+
         parent::__construct($email, $imageURL);
         $this->id = intval($id);
         $this->password = $password;
         $this->name = $name;
         $this->type = intval($type);
         $this->createdAt = $createdAtVerified->format(User::$dateFormat);
-
-        if (!empty($imageURL) && !filter_var($imageURL, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException("Invalid imageURL format: $imageURL");
-        }
-
-        // Construct correct imageURL for local uploads
-        if (!empty($imageURL)) {
-            $baseURL = getBaseURL();
-            $this->imageURL = rtrim($baseURL, '/') . '/' . ltrim($imageURL, '/');
-        } else {
-            $this->imageURL = null; // or handle default image URL logic if needed
-        }
     }
 
     static function fromObject($object)

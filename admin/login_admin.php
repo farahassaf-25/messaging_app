@@ -29,6 +29,17 @@
                         </svg>
                         <h2>ConvoConnect</h2>
                     </div>
+                    <?php
+                    session_start();
+                    if (isset($_SESSION['error_message'])) {
+                        echo "<script>alert('" . $_SESSION['error_message'] . "');</script>";
+                        unset($_SESSION['error_message']);
+                    }
+                    if (isset($_SESSION['success_message'])) {
+                        echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
+                        unset($_SESSION['success_message']);
+                    }
+                    ?>
                     <input type="email" name="email" required placeholder="Enter Your Email" id="email" autocomplete="off" />
                     <div class="password-input">
                         <input type="password" name="password" required placeholder="Enter Your Password" id="pass" autocomplete="off" />

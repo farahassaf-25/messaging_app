@@ -29,6 +29,16 @@
                         </svg>
                         <h2>ConvoConnect</h2>
                     </div>
+                    <?php
+                    if (isset($_SESSION['error_message'])) {
+                        echo "<div class='alert alert-danger'>" . $_SESSION['error_message'] . "</div>";
+                        unset($_SESSION['error_message']);
+                    }
+                    if (isset($_SESSION['success_message'])) {
+                        echo "<div class='alert alert-success'>" . $_SESSION['success_message'] . "</div>";
+                        unset($_SESSION['success_message']);
+                    }
+                    ?>
                     <input type="email" name="email" required placeholder="Enter Your Email" autocomplete="off" />
                     <div class="password-input">
                         <input type="password" name="password" required placeholder="Enter Your Password" id="pass" autocomplete="off" />
@@ -46,34 +56,6 @@
             </div>
         </div>
     </div>
-    <div id="liveAlertPlaceholder"></div>
-
-    <script src="../../common/scripts/appendAlert.js"></script>
-    <?php if (!empty($_SESSION['error_message'])) : ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                if (typeof appendAlert === 'function') {
-                    appendAlert("<?= $_SESSION['error_message'] ?>", "danger", true, 5000);
-                } else {
-                    console.error("appendAlert function is not defined.");
-                }
-            });
-        </script>
-        <?php unset($_SESSION['error_message']); ?>
-    <?php endif; ?>
-
-    <?php if (!empty($_SESSION['success_message'])) : ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                if (typeof appendAlert === 'function') {
-                    appendAlert("<?= $_SESSION['success_message'] ?>", "success", true, 5000);
-                } else {
-                    console.error("appendAlert function is not defined.");
-                }
-            });
-        </script>
-        <?php unset($_SESSION['success_message']); ?>
-    <?php endif; ?>
 
     <script src="scripts/login.js"></script>
     <script src="scripts/switch_mode.js"></script>
