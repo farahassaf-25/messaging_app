@@ -50,12 +50,16 @@ class User extends UserSimple
         $this->type = intval($type);
         $this->createdAt = $createdAtVerified->format(User::$dateFormat);
 
+        if (!empty($imageURL) && !filter_var($imageURL, FILTER_VALIDATE_URL)) {
+            throw new InvalidArgumentException("Invalid imageURL format: $imageURL");
+        }
+
         // Construct correct imageURL for local uploads
-        if (!filter_var($imageURL, FILTER_VALIDATE_URL)) {
+        if (!empty($imageURL)) {
             $baseURL = getBaseURL();
             $this->imageURL = rtrim($baseURL, '/') . '/' . ltrim($imageURL, '/');
         } else {
-            $this->imageURL = $imageURL;
+            $this->imageURL = null; // or handle default image URL logic if needed
         }
     }
 

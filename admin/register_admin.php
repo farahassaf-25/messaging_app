@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="styles/login_register.css">
     <link rel="stylesheet" href="styles/dark_mode.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="../common/styles/global.css">
     <title>ConvoConnect | Register Admin</title>
 </head>
@@ -33,6 +28,19 @@
                         </svg>
                         <h2>ConvoConnect</h2>
                     </div>
+
+                    <?php
+                    session_start();
+                    if (isset($_SESSION['error_message'])) {
+                        echo "<script>alert('" . $_SESSION['error_message'] . "');</script>";
+                        unset($_SESSION['error_message']);
+                    }
+                    if (isset($_SESSION['success_message'])) {
+                        echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
+                        unset($_SESSION['success_message']);
+                    }
+                    ?>
+
                     <input type="text" name="name" required placeholder="Enter Your Name" autocomplete="off" />
                     <input type="email" name="email" required placeholder="Enter Your Email" autocomplete="off" />
                     <div class="password-input">
@@ -43,25 +51,6 @@
                         <input type="password" name="confirmpass" required placeholder="Confirm Your Password" id="confirmpass" autocomplete="off" />
                         <i class="fas fa-eye-slash password-toggle-icon"></i>
                     </div>
-
-                    <?php if (isset($_SESSION['success_message'])) : ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <?php echo $_SESSION['success_message']; ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <?php unset($_SESSION['success_message']); ?>
-                    <?php endif; ?>
-
-                    <?php if (isset($_SESSION['error_message'])) : ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?php echo $_SESSION['error_message']; ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <?php unset($_SESSION['error_message']); ?>
-                    <?php endif; ?>
-
-                    <span id="valid-pass" class="valid-pass"></span>
-                    <span id="confirm-pass-msg" class="valid-pass"></span>
                     <button type="submit" class="signin">SIGN UP</button>
                     <p class="signup">Already Have An Account? <span><a href="login_admin.php">Sign In</a></span></p>
                 </form>
@@ -69,8 +58,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS (Optional for alerts) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="scripts/login.js"></script>
     <script src="scripts/switch_mode.js"></script>
 </body>

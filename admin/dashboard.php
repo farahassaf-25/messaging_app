@@ -1,5 +1,3 @@
-<?php include_once 'php/admin_dashboard.php'; ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,6 +17,7 @@
 </head>
 
 <body>
+    <?php include_once 'php/admin_dashboard.php'; ?>
     <div class="container-fluid p-3">
         <div class="row">
             <!-- sidebar  -->
