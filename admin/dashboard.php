@@ -1,6 +1,5 @@
 <?php include_once 'php/admin_dashboard.php'; ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,10 +46,11 @@
                     </li>
                     <li class="nav-item admin-details">
                         <a href="#adminTab" class="nav-link" data-bs-toggle="tab">
-                            <img class="rounded-circle" src="../assets/defaultProfile.webp" alt="Admin" width="40">
-                            <?php echo isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Admin Name'; ?>
+                            <img class="rounded-circle" src="<?php echo isset($_SESSION['user_image']) ? htmlspecialchars($_SESSION['user_image']) : '../assets/defaultProfile.webp'; ?>" alt="Admin" width="40">
+                            <?php echo isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'Admin Name'; ?>
                         </a>
                     </li>
+
                     <li class="nav-item logout">
                         <a class="btn nav-link text-white d-flex align-items-center" href="logout.php"><i class="fas fa-arrow-right me-2"></i> Logout</a>
                     </li>
@@ -86,7 +86,8 @@
                     </li>
                     <li class="nav-item admin-details">
                         <a href="#adminTab" class="nav-link" data-bs-toggle="tab">
-                            <img class="rounded-circle" src="../assets/defaultProfile.webp" alt="Admin" width="40">
+                            <!-- <img class="rounded-circle" src="../assets/defaultProfile.webp" alt="Admin" width="40"> -->
+                            <img class="rounded-circle" src="<?php echo isset($_SESSION['user_image']) ? htmlspecialchars($_SESSION['user_image']) : '../assets/defaultProfile.webp'; ?>" alt="Admin" width="40">
                             <span class="nav-text"><?php echo isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Admin Name'; ?></span>
                         </a>
                     </li>
@@ -110,7 +111,10 @@
                     <a href="#usersTab" class="nav-link active" data-bs-toggle="tab"><i class="fas fa-users"></i></a>
                     <a href="#reportsTab" class="nav-link" data-bs-toggle="tab"><i class="fas fa-chart-bar"></i></a>
                     <a href="#" class="nav-link theme-toggle"><i class="fas fa-solid fa-lightbulb"></i></a>
-                    <a href="#adminTab" class="nav-link" data-bs-toggle="tab"><img src="../assets/defaultProfile.webp" class="rounded-circle" width="30" alt="Admin"></a>
+                    <a href="#adminTab" class="nav-link" data-bs-toggle="tab">
+                        <!-- <img src="../assets/defaultProfile.webp" class="rounded-circle" width="30" alt="Admin"> -->
+                        <img class="rounded-circle" src="<?php echo isset($_SESSION['user_image']) ? htmlspecialchars($_SESSION['user_image']) : '../assets/defaultProfile.webp'; ?>" alt="Admin" width="40">
+                    </a>
                     <a class="nav-link" href="logout.php"><i class="fas fa-arrow-right"></i></a>
                 </div>
             </nav>
@@ -122,9 +126,7 @@
                     <div class="container">
                         <header class="header d-flex justify-content-center align-items-center">
                             <div class="input-group">
-                                <form action="" method="GET" class="w-100">
-                                    <input class="form-control border rounded-pill" type="search" name="search" placeholder="Search User" id="searchInput">
-                                </form>
+                                <input class="form-control border rounded-pill" type="search" placeholder="Search here ..." id="searchUser">
                             </div>
                         </header>
                         <hr class="d-none d-md-block">
@@ -145,7 +147,7 @@
                                 <table class="table table-bordered table-responsive">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" name="" id=""></th>
+                                            <th><input type="checkbox" id="selectAll"></th>
                                             <th>User Id</th>
                                             <th>Name</th>
                                             <th>Email</th>
@@ -161,7 +163,7 @@
                                                 $feedbackExists = !is_null($row['feedback_id']);
                                                 $buttonClass = $feedbackExists ? 'btn-secondary' : 'btn-secondary opacity-50';
                                                 echo "<tr>";
-                                                echo "<td><input type='checkbox' name='' id=''></td>";
+                                                echo "<td><input type='checkbox' class='selectUserCheckbox' value='" . $row['id'] . "'></td>";
                                                 echo "<td>" . $row['id'] . "</td>";
                                                 echo "<td>" . $row['name'] . "</td>";
                                                 echo "<td>" . $row['email'] . "</td>";
@@ -175,10 +177,9 @@
                                         }
                                         ?>
                                     </tbody>
-
                                 </table>
                             </div>
-                            <button id="deleteAllUsersBtn" class="btn btn-danger mt-2 float-end" data-bs-toggle="modal" data-bs-target="#deleteAllUsers">Delete All</button>
+                            <button id="deleteSelectedUsersBtn" class="btn btn-danger mt-2 float-end" data-bs-toggle="modal" data-bs-target="#deleteSelectedUsersModal">Delete Users</button>
                         </section>
                     </div>
                 </div>
@@ -188,9 +189,7 @@
                     <div class="container">
                         <header class="header d-flex justify-content-center align-items-center">
                             <div class="input-group">
-                                <form action="" method="GET" class="w-100">
-                                    <input class="form-control border rounded-pill" type="search" name="search" placeholder="Search Report by Id" id="searchInput">
-                                </form>
+                                <input class="form-control border rounded-pill" type="search" placeholder="Search here ..." id="searchReport">
                             </div>
                         </header>
                         <hr class="d-none d-md-block">
@@ -202,12 +201,12 @@
                             </div>
                         </div>
 
-                        <section class="user-management">
+                        <section class="report-management">
                             <div class="table-scroll">
                                 <table class="table table-bordered table-responsive">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" name="" id=""></th>
+                                            <th><input type="checkbox" id="selectAllReports"></th>
                                             <th>Id</th>
                                             <th>Reporter Id</th>
                                             <th>Reported Id</th>
@@ -220,7 +219,7 @@
                                         if ($total_reports > 0) {
                                             while ($row = $resreports->fetch_assoc()) {
                                                 echo "<tr>";
-                                                echo "<td><input type='checkbox' name='' id=''></td>";
+                                                echo "<td><input type='checkbox' class='selectReportCheckbox' value='" . $row['report_id'] . "'></td>";
                                                 echo "<td>" . $row['report_id'] . "</td>";
                                                 echo "<td>" . $row['reporter_id'] . "</td>";
                                                 echo "<td>" . $row['reported_id'] . "</td>";
@@ -235,20 +234,20 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <button id="deleteAllUsersBtn" class="btn btn-danger mt-2 float-end" data-bs-toggle="modal" data-bs-target="#deleteAllUsers">Delete All</button>
+                            <button id="deleteSelectedReportsBtn" class="btn btn-danger mt-2 float-end" data-bs-toggle="modal" data-bs-target="#deleteSelectedReportsModal">Delete Reports</button>
                         </section>
                     </div>
                 </div>
 
 
-                <!-- admin tab -->
+                <!-- Admin Tab -->
                 <div id="adminTab" class="tab-pane fade">
                     <div class="container">
                         <header class="header d-flex justify-content-between align-items-center">
                             <div class="input-group">
-                                <input class="form-control border rounded-pill" type="search" placeholder="Search User" id="search-input">
+                                <input class="form-control border rounded-pill" type="search" placeholder="Search here ..." id="searchAdmin">
                             </div>
-                            <button id="addAdminBtn" class="btn btn-primary custom-btn-padding" data-bs-toggle="modal" data-bs-target="#addAdmin">Add Admin</button>
+                            <button id="addAdminBtn" class="btn btn-primary custom-btn-padding" data-bs-toggle="modal" data-bs-target="#addAdminModal">Add Admin</button>
                         </header>
                         <hr class="d-none d-md-block">
 
@@ -264,29 +263,27 @@
                                 <table class="table table-bordered table-responsive">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" name="" id=""></th>
                                             <th>Admin Id</th>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Update</th>
-                                            <th>Delete Admin</th>
+                                            <!-- <th>Delete Admin</th> -->
                                         </tr>
                                     </thead>
-                                    <tbody id="userTableBody">
+                                    <tbody id="adminTableBody">
                                         <?php
                                         if ($resultadmin->num_rows > 0) {
                                             while ($row = $resultadmin->fetch_assoc()) {
                                                 echo "<tr>";
-                                                echo "<td><input type='checkbox' name='' id=''></td>";
                                                 echo "<td>" . $row['id'] . "</td>";
                                                 echo "<td>" . $row['name'] . "</td>";
                                                 echo "<td>" . $row['email'] . "</td>";
-                                                echo "<td><button id='editAdminBtn' class='btn btn-success btn-sm' data-bs-toggle='modal' data-bs-target='#editAdminModal'>Update</button></td>";
-                                                echo "<td><button class='btn btn-danger btn-sm'>Delete</button></td>";
+                                                echo "<td><button class='btn btn-success btn-sm editAdminBtn' data-bs-toggle='modal' data-bs-target='#editAdminModal' data-user-id='" . $row['id'] . "' data-username='" . $row['name'] . "' data-email='" . $row['email'] . "'>Update</button></td>";
+                                                // echo "<td><button class='btn btn-danger btn-sm deleteAdminBtn' data-bs-toggle='modal' data-bs-target='#deleteAdminModal' data-admin-id='" . $row['id'] . "' data-admin-name='" . $row['name'] . "'>Delete</button></td>";
                                                 echo "</tr>";
                                             }
                                         } else {
-                                            echo "<tr><td colspan='7'>No admins found</td></tr>";
+                                            echo "<tr><td colspan='6'>No admins found</td></tr>";
                                         }
                                         ?>
                                     </tbody>
@@ -295,7 +292,6 @@
                         </section>
                     </div>
                 </div>
-
 
             </div>
         </div>
@@ -357,24 +353,25 @@
         </div>
     </div>
 
-    <!-- User Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteConfirmationUserModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmationUserModal" tabindex="-1" aria-labelledby="deleteConfirmationUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                    <h5 class="modal-title" id="deleteConfirmationUserModalLabel">Delete User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this user?
+                    Loading...
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" id="confirmUserDeleteBtn" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-danger" id="confirmUserDeleteBtn" disabled>Delete</button>
                 </div>
             </div>
         </div>
     </div>
+
 
 
 
@@ -411,25 +408,28 @@
     </div>
 
 
-    <!-- Delete User Modal -->
-    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <!-- Delete Admin Modal -->
+    <!-- <div class="modal fade" id="deleteAdminModal" tabindex="-1" aria-labelledby="deleteAdminModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteUserModalLabel">Delete User</h5>
+                    <h5 class="modal-title" id="deleteAdminModalLabel">Delete Admin</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this user?</p>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    <p>Are you sure you want to delete admin <span id="adminToDeleteName"></span>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="confirmDeleteAdminBtn">Delete</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
+
 
     <!-- Delete All Users Modal -->
-    <div class="modal fade" id="deleteAllUsers" tabindex="-1" aria-labelledby="deleteAllUsersModalLabel" aria-hidden="true">
+    <!-- <div class="modal fade" id="deleteAllUsers" tabindex="-1" aria-labelledby="deleteAllUsersModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -448,10 +448,48 @@
                 </div>
             </div>
         </div>
+    </div> -->
+
+    <!-- Delete Selected Users Modal -->
+    <div class="modal fade" id="deleteSelectedUsersModal" tabindex="-1" aria-labelledby="deleteSelectedUsersModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteSelectedUsersModalLabel">Delete Selected Users</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the selected users?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="confirmDeleteSelectedUsersBtn">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Deleting Selected Reports -->
+    <div class="modal fade" id="deleteSelectedReportsModal" tabindex="-1" aria-labelledby="deleteSelectedReportsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteSelectedReportsModalLabel">Delete Selected Reports</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the selected reports?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="confirmDeleteSelectedReportsBtn">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="usersWithReportsFeedbackModal" tabindex="-1" aria-labelledby="usersWithReportsFeedbackModalLabel" aria-hidden="true">
+    <!-- <div class="modal fade" id="usersWithReportsFeedbackModal" tabindex="-1" aria-labelledby="usersWithReportsFeedbackModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -466,12 +504,12 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 
-    <!-- Add Admin Modal  -->
-    <div class="modal fade" id="addAdmin" tabindex="-1" aria-labelledby="addAdminModalLabel" aria-hidden="true">
+    <!-- Add Admin Modal -->
+    <div class="modal fade" id="addAdminModal" tabindex="-1" aria-labelledby="addAdminModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -479,7 +517,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="POST">
+                    <form id="addAdminForm" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" name="username" required>
@@ -492,13 +530,18 @@
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
-                        <!-- <div class="mb-3">
-                            <label for="type" class="form-label">type</label>
-                            <select class="form-control" id="type" name="type" required>
-                                <option value="user">User</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div> -->
+                        <div class="mb-3">
+                            <label for="confirmpassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Profile Image</label>
+                            <input type="file" class="form-control" id="image" name="image">
+                        </div>
+                        <div class="mb-3">
+                            <label for="imageUrl" class="form-label">Or Image URL</label>
+                            <input type="text" class="form-control" id="imageUrl" name="imageUrl">
+                        </div>
                         <button type="submit" class="btn btn-primary">Add Admin</button>
                     </form>
                 </div>
@@ -506,30 +549,59 @@
         </div>
     </div>
 
+
+    <!-- Edit Admin Modal -->
+    <div class="modal fade" id="editAdminModal" tabindex="-1" aria-labelledby="editAdminModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAdminModalLabel">Edit Admin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAdminForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="editAdminUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="editAdminUsername" name="username">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAdminEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editAdminEmail" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAdminImageToggle" class="form-label">Choose Image Source</label>
+                            <select class="form-control" id="editAdminImageToggle" name="imageToggle">
+                                <option value="upload">Upload Image</option>
+                                <option value="url">Image URL</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="editAdminImageUploadDiv">
+                            <label for="editAdminImage" class="form-label">Profile Image</label>
+                            <input type="file" class="form-control" id="editAdminImage" name="image">
+                        </div>
+                        <div class="mb-3" id="editAdminImageUrlDiv" style="display: none;">
+                            <label for="editAdminImageUrl" class="form-label">Profile Image URL</label>
+                            <input type="text" class="form-control" id="editAdminImageUrl" name="imageUrl">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="scripts/adminDashboard.js"></script>
-    <script src="scripts/updateUser.js"></script>
     <script src="scripts/userManagement.js"></script>
     <script src="scripts/switch_mode.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#deleteAllUsersBtn').click(function() {
-                // Check if there are users with reports or feedback
-                var usersWithReportsFeedback = <?php echo $usersWithReportsFeedback ? 'true' : 'false'; ?>;
-                if (usersWithReportsFeedback) {
-                    $('#deleteAllUsersModal').modal('show');
-                } else {
-                    // Show alert or take appropriate action if no users with reports or feedback
-                    alert('No users with reports or feedback found.');
-                }
-            });
-        });
-    </script>
+    <script src="scripts/feedbackManagement.js"></script>
+    <script src="scripts/reportManagement.js"></script>
+    <script src="scripts/adminManagement.js"></script>
 
 </body>
 

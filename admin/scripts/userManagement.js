@@ -1,166 +1,61 @@
 $(document).ready(function() {
-    // Handle edit user button click
+    // handle update user button click
     $('.editUserBtn').on('click', function() {
         var userId = $(this).data('user-id');
         var username = $(this).data('username');
         var email = $(this).data('email');
-        
-        console.log("Edit user clicked for user ID: " + userId);
 
-        // Populate the modal fields with the user data
+        $('#editUserForm').data('user-id', userId);
         $('#editUserUsername').val(username);
         $('#editUserEmail').val(email);
     });
 
-    // Handle view feedback button click
-    $('.viewFeedbackBtn').on('click', function() {
+    // handle the form submission of user update
+    $('#editUserForm').on('submit', function(event) {
+        event.preventDefault();
+
         var userId = $(this).data('user-id');
-        var modal = $('#viewFeedbackModal');
-        var feedbackContent = $('#feedbackContent');
+        var username = $('#editUserUsername').val();
+        var email = $('#editUserEmail').val();
+        var status = $('#editUserStatus').val();
+        var type = (status === 'active') ? 0 : 1;
 
-        console.log("View feedback clicked for user ID: " + userId);
-
-        if (userId) {
-            // Fetch feedback for the user
-            $.ajax({
-                url: 'php/getFeedback.php',
-                type: 'GET',
-                data: { userId: userId },
-                success: function(response) {
-                    console.log("Feedback response:", response);
-                    try {
-                        response = JSON.parse(response);
-                        if (response.success) {
-                            feedbackContent.text(response.feedback || 'No feedback available for this user.');
-                            $('#deleteFeedbackBtn').data('feedback-id', response.feedback_id || '');
-                        } else {
-                            feedbackContent.text('Failed to load feedback: ' + response.message);
-                        }
-                    } catch (e) {
-                        console.error('Parsing error:', e);
-                        feedbackContent.text('Unexpected response from the server');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching feedback:', status, error);
-                    feedbackContent.text('Error fetching feedback');
+        $.ajax({
+            url: 'php/updateUser.php',
+            type: 'POST',
+            data: {
+                userId: userId,
+                username: username,
+                email: email,
+                type: type
+            },
+            success: function(response) {
+                response = JSON.parse(response);
+                if (response.success) {
+                    alert('User updated successfully');
+                    location.reload();
+                } else {
+                    alert('Failed to update user: ' + response.message);
                 }
-            });
-        } else {
-            feedbackContent.text('No feedback available for this user.');
-        }
+            },
+            error: function(xhr, status, error) {
+                alert('Error updating user');
+            }
+        });
     });
-
-
-    var currentViewButton = null;
-    // Handle view report button click
-    $('.viewReportBtn').on('click', function() {
-        var userId = $(this).data('report-id');
-        var modal = $('#viewReportModal');
-        var reportReason = $('#reportReason');
-        currentViewButton = $(this); 
-
-        console.log("View report clicked for user ID: " + userId);
-
-        if (userId) {
-            $.ajax({
-                url: 'php/getReport.php',
-                type: 'GET',
-                data: { userId: userId },
-                success: function(response) {
-                    console.log("Report response:", response);
-                    try {
-                        response = JSON.parse(response);
-                        if (response.success) {
-                            reportReason.text(response.report || 'No report available for this user.');
-                            $('#deleteReportBtn').data('report-id', response.report_id || '');
-                            currentViewButton.addClass('viewed');
-                            modal.modal('show');
-                        } else {
-                            reportReason.text('Failed to load report: ' + response.message);
-                        }
-                    } catch (e) {
-                        console.error('Parsing error:', e);
-                        reportReason.text('Unexpected response from the server');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching report:', status, error);
-                    reportReason.text('Error fetching report');
-                }
-            });
-        } else {
-            reportReason.text('No report available for this user.');
-        }
-    });
-
-    // Remove opacity class when the modal is closed
-    $('#viewReportModal').on('hidden.bs.modal', function() {
-        if(currentViewButton) {
-            currentViewButton.addClass('viewed');
-        }
-    });
-
-    $('#cancelReportBtn').on('click', function() {
-        $('#viewReportModal').modal('hide');
-    });
-
-    var reportIdToDelete = null;
-    var rowToDelete = null;
-
-    // Handle delete report button click
-    $(document).on('click', '.deleteReportBtn', function() {
-        reportIdToDelete = $(this).data('report-id');
-        rowToDelete = $(this).closest('tr');
-
-        // Show the confirmation modal
-        $('#deleteConfirmationModal').modal('show');
-    });
-
-    // Handle confirm delete button click
-    $('#confirmDeleteBtn').on('click', function() {
-        if (reportIdToDelete) {
-            $.ajax({
-                url: 'php/deleteReport.php',
-                type: 'POST',
-                data: { reportId: reportIdToDelete },
-                success: function(response) {
-                    try {
-                        response = JSON.parse(response);
-                        if (response.success) {
-                            rowToDelete.remove();  // Remove the row from the table
-                            console.log('Report deleted successfully');
-                        } else {
-                            console.error('Failed to delete report: ' + response.message);
-                        }
-                    } catch (e) {
-                        console.error('Parsing error:', e);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error deleting report:', status, error);
-                }
-            });
-        }
-
-        // Hide the confirmation modal
-        $('#deleteConfirmationModal').modal('hide');
-    });
-
-
-
 
     var userIdToDelete = null;
+    var rowToDelete = null;
 
-    // Handle delete user button click
+    // handle delete user button click
     $('.deleteUserBtn').on('click', function() {
         userIdToDelete = $(this).data('user-id');
-        rowToDelete.remove(); // Store reference to the row
+        rowToDelete = $(this).closest('tr');
 
         var modal = $('#deleteConfirmationUserModal');
         var modalBody = modal.find('.modal-body');
 
-        // Clear previous messages
+        // clear previous messages
         modalBody.text('Loading...');
 
         $.ajax({
@@ -183,8 +78,6 @@ $(document).ready(function() {
                             $('#confirmUserDeleteBtn').prop('disabled', false);
                         }
                         modalBody.text(message);
-
-                        // Show the modal
                         modal.modal('show');
                     } else {
                         modalBody.text('Error checking user status: ' + response.message);
@@ -201,7 +94,7 @@ $(document).ready(function() {
         });
     });
 
-    // Handle confirm delete button click
+    // handle confirm delete button click
     $('#confirmUserDeleteBtn').on('click', function() {
         if (userIdToDelete) {
             $.ajax({
@@ -212,13 +105,12 @@ $(document).ready(function() {
                     try {
                         response = JSON.parse(response);
                         if (response.success) {
-                            // Remove the row from the table
-                            $('#user-' + userIdToDelete).remove();
-
-                            // Hide the modal
+                            rowToDelete.remove();
                             $('#deleteConfirmationUserModal').modal('hide');
-                            rowToDelete.remove(); 
-                            // alert('User deleted successfully.');
+                            alert('User deleted successfully.');
+                            $('.modal-backdrop').remove();
+                            $('body').removeClass('modal-open');
+                            $('body').css('padding-right', '');
                         } else {
                             alert('Error deleting user: ' + response.message);
                         }
@@ -237,55 +129,130 @@ $(document).ready(function() {
         }
     });
 
-    // Handle delete feedback button click
-    // var currentdeleteFeedbackButton = null;
-    $('#deleteFeedbackBtn').on('click', function() {
-        var feedbackId = $(this).data('feedback-id');
-        // currentdeleteFeedbackButton = $(this);
+    function toggleDeleteButton() {
+        if ($('.selectUserCheckbox:checked').length > 0) {
+            $('#deleteSelectedUsersBtn').prop('disabled', false);
+        } else {
+            $('#deleteSelectedUsersBtn').prop('disabled', true);
+        }
+    }
 
-        if (feedbackId) {
-            if (confirm('Are you sure you want to delete this feedback?')) {
+    $('#selectAll').on('click', function() {
+        $('.selectUserCheckbox').prop('checked', this.checked);
+        toggleDeleteButton();
+    });
+
+    $(document).on('change', '.selectUserCheckbox', function() {
+        toggleDeleteButton();
+        if ($('.selectUserCheckbox:checked').length === $('.selectUserCheckbox').length) {
+            $('#selectAll').prop('checked', true);
+        } else {
+            $('#selectAll').prop('checked', false);
+        }
+    });
+
+    $('#confirmDeleteSelectedUsersBtn').on('click', function() {
+        var selectedUsers = [];
+        $('.selectUserCheckbox:checked').each(function() {
+            selectedUsers.push($(this).val());
+        });
+
+        if (selectedUsers.length > 0) {
             $.ajax({
-                url: 'php/deleteFeedback.php',
+                url: 'php/deleteUsers.php',
                 type: 'POST',
-                data: { feedbackId: feedbackId },
+                data: { userIds: selectedUsers },
+                dataType: 'json',
                 success: function(response) {
-                    console.log("Delete feedback response:", response);
-                    try {
-                        response = JSON.parse(response);
-                        if (response.success) {
-                             // Feedback deleted successfully
-               $('#feedbackContent').text('Feedback deleted successfully.');
-               // Close the modal (optional)
-               $('#viewFeedbackModal').modal('hide');
+                    let message = '';
+                    let successMessage = '';
+                    let issueMessage = 'Some users could not be deleted because:\n';
 
-               // Update the user table based on feedbackButtonClass
-               var feedbackButtonClass = response.feedbackButtonClass || '';
-               if (feedbackButtonClass) {
-                   $('#user-' + feedbackId + ' .viewFeedbackBtn').addClass(feedbackButtonClass);
-               }
-                            alert('Feedback deleted successfully.');
-                            location.reload();
-                        } else {
-                            $('#feedbackContent').text('Failed to delete feedback: ' + response.message);
+                    if (response.success) {
+                        // Only remove rows for successfully deleted users
+                        if (Array.isArray(response.deletedUsers) && response.deletedUsers.length > 0) {
+                            response.deletedUsers.forEach(function(userId) {
+                                $('.selectUserCheckbox[value="' + userId + '"]').closest('tr').remove();
+                            });
+                            successMessage = 'Users deleted successfully.\n';
                         }
-                    } catch (e) {
-                        console.error('Parsing error:', e);
-                        $('#feedbackContent').text('An error occurred. Please try again later.');
+
+                        let issueDetails = response.issueDetails;
+                        if (Array.isArray(issueDetails.usersWithFeedback) && issueDetails.usersWithFeedback.length > 0) {
+                            issueMessage += '- They have feedback.\n';
+                        }
+                        if (Array.isArray(issueDetails.usersWithReports) && issueDetails.usersWithReports.length > 0) {
+                            issueMessage += '- They have made reports.\n';
+                        }
+                        if (Array.isArray(issueDetails.usersReportedByOthers) && issueDetails.usersReportedByOthers.length > 0) {
+                            issueMessage += '- They are reported by others.\n';
+                        }
+
+                        // Append issue message only if there are issues
+                        if (issueMessage !== 'Some users could not be deleted because:\n') {
+                            message = successMessage + issueMessage;
+                        } else {
+                            message = successMessage;
+                        }
+                    } else {
+                        message = 'Error deleting users: ' + response.message;
                     }
+
+                    alert(message);
+                    $('#deleteUsersModal').modal('hide'); // Close the modal
+                    toggleDeleteButton(); // Update delete button state
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('AJAX error:', textStatus, errorThrown);
-                    $('#feedbackContent').text('An error occurred. Please try again later.');
+                error: function(xhr, status, error) {
+                    console.error('Error deleting users:', status, error);
+                    console.log(xhr.responseText); // Log the response for debugging
+                    alert('Error deleting users: ' + status + ' ' + error);
                 }
             });
+        } else {
+            alert('No users selected to delete.');
         }
-    } else {
-        console.error('Missing feedback ID');
-    }
+    });
+
+
+    // Store initial table content
+    var initialTableContent = $('#userTableBody').html();
+
+    // Search user by ID, Name, or Email
+    $('#searchUser').on('input', function() {
+        var searchTerm = $(this).val().trim();
+
+        if (searchTerm) {
+            $.ajax({
+                url: 'php/searchUser.php',
+                type: 'GET',
+                data: { search_term: searchTerm },
+                success: function(response) {
+                    response = JSON.parse(response);
+                    if (response.success) {
+                        var users = response.users;
+                        var userRows = users.map(function(user) {
+                            return "<tr>" +
+                                "<td><input type='checkbox' class='selectUserCheckbox' value='" + user.id + "'></td>" +
+                                "<td>" + user.id + "</td>" +
+                                "<td>" + user.name + "</td>" +
+                                "<td>" + user.email + "</td>" +
+                                "<td><button class='btn btn-success btn-sm editUserBtn' data-bs-toggle='modal' data-bs-target='#editUserModal' data-user-id='" + user.id + "' data-username='" + user.name + "' data-email='" + user.email + "'>Update</button></td>" +
+                                "<td><button class='btn btn-sm viewFeedbackBtn " + (user.feedback_exists ? 'btn-secondary' : 'btn-secondary opacity-50') + "' data-bs-toggle='modal' data-bs-target='#viewFeedbackModal' data-user-id='" + user.id + "'>View</button></td>" +
+                                "<td><button class='btn btn-danger btn-sm deleteUserBtn' data-user-id='" + user.id + "' data-bs-toggle='modal' data-bs-target='#deleteConfirmationUserModal'>Delete</button></td>" +
+                                "</tr>";
+                        }).join('');
+
+                        $('#userTableBody').html(userRows);
+                    } else {
+                        $('#userTableBody').html("<tr><td colspan='7'>No users found</td></tr>");
+                    }
+                },
+                error: function() {
+                    $('#userTableBody').html("<tr><td colspan='7'>Error searching for users</td></tr>");
+                }
+            });
+        } else {
+            $('#userTableBody').html(initialTableContent); // Restore initial table content if search term is empty
+        }
+    });
 });
-    
-});
-
-
-

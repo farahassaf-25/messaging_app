@@ -1,18 +1,17 @@
 /** This is a stripped down user model used on client side */
 class User {
-  email;
-  imageURL;
   constructor(email, imageURL) {
     this.email = email;
     this.imageURL = imageURL;
+  }
+
+  fromObject(obj) {
+    return new User(obj.email, obj.imageURL);
   }
 }
 
 // /** User model matching the MySQL table */
 // class User extends User {
-//   id;
-//   type;
-//   createdAt;
 //   constructor(id, type, createdAt, email, imageURL) {
 //     super(email, imageURL);
 //     this.id = id;

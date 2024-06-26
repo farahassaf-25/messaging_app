@@ -6,22 +6,15 @@ include_once "db.php";
 function authenticateUser($email, $password, $type)
 {
     global $conn;
-
-    // retrieve user from database by email
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND type = ?");
+    $stmt = $conn->prepare("SELECT id, name, email, password, type, imageURL, createdAt FROM users WHERE email = ? AND type = ?");
     $stmt->bind_param("si", $email, $type);
     $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows === 1) {
-        $user = $result->fetch_assoc();
-
-        // verify password
-        if (password_verify($password, $user['password'])) {
-            return User::fromObject($user);
+    $stmt->bind_result($id, $name, $email, $hashed_password, $type, $imageURL, $createdAt);
+    if ($stmt->fetch()) {
+        if (password_verify($password, $hashed_password)) {
+            return new User($id, $email, $hashed_password, $name, $imageURL, $type, $createdAt);
         }
     }
-
     return null;
 }
 
@@ -48,9 +41,12 @@ function registerUser($name, $email, $password, $type)
 {
     global $conn;
 
+    // Hash the password before storing it
+    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
     // Insert the new user into the database
     $stmt = $conn->prepare("INSERT INTO users (name, email, password, type) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssi", $name, $email, $password, $type);
+    $stmt->bind_param("sssi", $name, $email, $hashed_password, $type);
     $success = $stmt->execute();
 
     return $success;

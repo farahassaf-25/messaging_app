@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['user_id'] = $user->id;
         $_SESSION['user_name'] = $user->name;
         $_SESSION['user_type'] = $user->type;
+        $_SESSION['user_image'] = $user->imageURL;
         $_SESSION['success_message'] = "Logged in successfully.";
 
         if ($user->type === 1) {

@@ -26,6 +26,7 @@ try {
         $stmt->execute();
         $result = $stmt->get_result();
         $row = $result->fetch_assoc();
+        $stmt->close();
 
         if ($row['reportCount'] > 0) {
             $response['message'] = 'Cannot delete user: This user has been reported. Please see the reports for more details.';
@@ -43,9 +44,8 @@ try {
             } else {
                 throw new Exception('Error deleting user: ' . $stmt->error);
             }
+            $stmt->close();
         }
-
-        $stmt->close();
     } else {
         throw new Exception('Invalid request method.');
     }

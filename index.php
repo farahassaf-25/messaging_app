@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="./common/styles/global.css">
-    <link rel="stylesheet" href="./common/styles/index.css">
+    <link rel="stylesheet" href="./landing/styles/index.css">
     <link rel="stylesheet" href="./common/styles/dark-mode.css">
     <title>ConvoConnect</title>
 </head>
@@ -28,19 +28,34 @@
                 </div>
                 <ul class="nav flex-column flex-grow-1 justify-content-evenly">
                     <li class="nav-item mb-3">
-                        <a class="nav-link active" href="#home"><i class="fas fa-home"></i></a>
+                        <a class="nav-link active" href="#home">
+                            <i class="fas fa-home"></i>
+                            <span class="nav-text">Home</span>
+                        </a>
                     </li>
                     <li class="nav-item mb-3">
-                        <a class="nav-link" href="#about"><i class="fas fa-solid fa-users"></i></a>
+                        <a class="nav-link" href="#about">
+                            <i class="fas fa-solid fa-users"></i>
+                            <span class="nav-text">About Us</span>
+                        </a>
                     </li>
                     <li class="nav-item mb-3">
-                        <a href="#contact" class="nav-link"><i class="fas fa-solid fa-envelope"></i></a>
+                        <a href="#contact" class="nav-link">
+                            <i class="fas fa-solid fa-envelope"></i>
+                            <span class="nav-text">Contact Us</span>
+                        </a>
                     </li>
                     <li class="nav-item mb-3">
-                        <a class="nav-link" href=""><i class="fas fa-solid fa-arrow-right"></i></a>
+                        <a class="nav-link" href="">
+                            <i class="fas fa-solid fa-arrow-right"></i>
+                            <span class="nav-text">Login</span>
+                        </a>
                     </li>
                     <li class="nav-item mb-3">
-                        <a class="nav-link modeToggleBtn" href="javascript:void(0);" id="dark-mode-toggle"><i class="fas fa-solid fa-lightbulb"></i></a>
+                        <a class="nav-link modeToggleBtn" href="javascript:void(0);" id="dark-mode-toggle">
+                            <i class="fas fa-solid fa-lightbulb"></i>
+                            <span class="nav-text">Switch Mode</span>
+                        </a>
                     </li>
                 </ul>
             </nav>
@@ -175,10 +190,3 @@
 </body>
 
 </html>
-
-<!-- [mail function]
-; For Win32 only.
-; https://php.net/smtp
-SMTP = localhost
-; https://php.net/smtp-port
-smtp_port = 25 -->

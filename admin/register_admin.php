@@ -3,11 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="styles/login_register.css">
     <link rel="stylesheet" href="styles/dark_mode.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="../common/styles/global.css">
     <title>ConvoConnect | Register Admin</title>
 </head>
@@ -39,6 +43,23 @@
                         <input type="password" name="confirmpass" required placeholder="Confirm Your Password" id="confirmpass" autocomplete="off" />
                         <i class="fas fa-eye-slash password-toggle-icon"></i>
                     </div>
+
+                    <?php if (isset($_SESSION['success_message'])) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?php echo $_SESSION['success_message']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <?php unset($_SESSION['success_message']); ?>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['error_message'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $_SESSION['error_message']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <?php unset($_SESSION['error_message']); ?>
+                    <?php endif; ?>
+
                     <span id="valid-pass" class="valid-pass"></span>
                     <span id="confirm-pass-msg" class="valid-pass"></span>
                     <button type="submit" class="signin">SIGN UP</button>
@@ -47,28 +68,11 @@
             </div>
         </div>
     </div>
-    <div id="liveAlertPlaceholder"></div>
 
-    <script src="../../common/scripts/appendAlert.js"></script>
+    <!-- Bootstrap JS (Optional for alerts) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="scripts/login.js"></script>
     <script src="scripts/switch_mode.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const successMessage = "<?php echo isset($_SESSION['success_message']) ? $_SESSION['success_message'] : ''; ?>";
-            const errorMessage = "<?php echo isset($_SESSION['error_message']) ? $_SESSION['error_message'] : ''; ?>";
-
-            if (successMessage) {
-                appendAlert(successMessage, "success", true, 3000);
-                <?php unset($_SESSION['success_message']); ?>
-            }
-
-            if (errorMessage) {
-                appendAlert(errorMessage, "danger", true, 3000);
-                <?php unset($_SESSION['error_message']); ?>
-            }
-        });
-    </script>
 </body>
 
 </html>

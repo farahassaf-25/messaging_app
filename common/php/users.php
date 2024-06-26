@@ -1,7 +1,6 @@
 <?php
 
 include "authentication.php";
-include_once "db.php";
 
 $user = isAuthenticated();
 if (!($user instanceof User)) {
