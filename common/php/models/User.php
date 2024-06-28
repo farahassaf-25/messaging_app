@@ -10,7 +10,7 @@ class UserSimple
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException("Invalid email address: $email");
         }
-        // Remove the URL validation here since it will be handled in the derived class
+        // remove the URL validation here since it will be handled in the derived class
         $this->email = $email;
         $this->imageURL = $imageURL;
     }

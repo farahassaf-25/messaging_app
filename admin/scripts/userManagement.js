@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    // handle update user button click
+    // updtae user btn click
     $('.editUserBtn').on('click', function() {
         var userId = $(this).data('user-id');
         var username = $(this).data('username');
@@ -10,7 +10,7 @@ $(document).ready(function() {
         $('#editUserEmail').val(email);
     });
 
-    // handle the form submission of user update
+    //user update
     $('#editUserForm').on('submit', function(event) {
         event.preventDefault();
 
@@ -21,7 +21,7 @@ $(document).ready(function() {
         var type = (status === 'active') ? 0 : 1;
 
         $.ajax({
-            url: 'php/updateUser.php',
+            url: 'php/userManagement/updateUser.php',
             type: 'POST',
             data: {
                 userId: userId,
@@ -47,7 +47,7 @@ $(document).ready(function() {
     var userIdToDelete = null;
     var rowToDelete = null;
 
-    // handle delete user button click
+    // delete user 
     $('.deleteUserBtn').on('click', function() {
         userIdToDelete = $(this).data('user-id');
         rowToDelete = $(this).closest('tr');
@@ -59,7 +59,7 @@ $(document).ready(function() {
         modalBody.text('Loading...');
 
         $.ajax({
-            url: 'php/checkUserStatus.php',
+            url: 'php/userManagement/checkUserStatus.php',
             type: 'GET',
             data: { userId: userIdToDelete },
             success: function(response) {
@@ -94,11 +94,11 @@ $(document).ready(function() {
         });
     });
 
-    // handle confirm delete button click
+    // confirm delete
     $('#confirmUserDeleteBtn').on('click', function() {
         if (userIdToDelete) {
             $.ajax({
-                url: 'php/deleteUser.php',
+                url: 'php/userManagement/deleteUser.php',
                 type: 'POST',
                 data: { userId: userIdToDelete },
                 success: function(response) {
@@ -159,7 +159,7 @@ $(document).ready(function() {
 
         if (selectedUsers.length > 0) {
             $.ajax({
-                url: 'php/deleteUsers.php',
+                url: 'php/userManagement/deleteUsers.php',
                 type: 'POST',
                 data: { userIds: selectedUsers },
                 dataType: 'json',
@@ -169,7 +169,6 @@ $(document).ready(function() {
                     let issueMessage = 'Some users could not be deleted because:\n';
 
                     if (response.success) {
-                        // Only remove rows for successfully deleted users
                         if (Array.isArray(response.deletedUsers) && response.deletedUsers.length > 0) {
                             response.deletedUsers.forEach(function(userId) {
                                 $('.selectUserCheckbox[value="' + userId + '"]').closest('tr').remove();
@@ -188,7 +187,6 @@ $(document).ready(function() {
                             issueMessage += '- They are reported by others.\n';
                         }
 
-                        // Append issue message only if there are issues
                         if (issueMessage !== 'Some users could not be deleted because:\n') {
                             message = successMessage + issueMessage;
                         } else {
@@ -199,12 +197,12 @@ $(document).ready(function() {
                     }
 
                     alert(message);
-                    $('#deleteUsersModal').modal('hide'); // Close the modal
-                    toggleDeleteButton(); // Update delete button state
+                    $('#deleteUsersModal').modal('hide'); 
+                    toggleDeleteButton(); 
                 },
                 error: function(xhr, status, error) {
                     console.error('Error deleting users:', status, error);
-                    console.log(xhr.responseText); // Log the response for debugging
+                    console.log(xhr.responseText); 
                     alert('Error deleting users: ' + status + ' ' + error);
                 }
             });
@@ -213,17 +211,15 @@ $(document).ready(function() {
         }
     });
 
-
-    // Store initial table content
     var initialTableContent = $('#userTableBody').html();
 
-    // Search user by ID, Name, or Email
+    // search user by ID, Name, or Email
     $('#searchUser').on('input', function() {
         var searchTerm = $(this).val().trim();
 
         if (searchTerm) {
             $.ajax({
-                url: 'php/searchUser.php',
+                url: 'php/userManagement/searchUser.php',
                 type: 'GET',
                 data: { search_term: searchTerm },
                 success: function(response) {
@@ -252,7 +248,7 @@ $(document).ready(function() {
                 }
             });
         } else {
-            $('#userTableBody').html(initialTableContent); // Restore initial table content if search term is empty
+            $('#userTableBody').html(initialTableContent); 
         }
     });
 });

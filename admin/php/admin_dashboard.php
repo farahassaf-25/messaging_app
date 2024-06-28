@@ -2,11 +2,6 @@
 
 include_once "../common/php/authentication.php";
 
-// session_start();
-
-// Search functionality
-// $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
-
 $query = "SELECT users.id, users.name, users.email, feedback.feedback_id 
           FROM users 
           LEFT JOIN feedback ON users.id = feedback.user_id
@@ -18,12 +13,6 @@ $stmt = "SELECT COUNT(*) as total_users FROM users WHERE type = 0";
 $stmttotalreports = "SELECT COUNT(*) as total_reports FROM reports";
 $stmtadmins = "SELECT COUNT(*) as total_admins FROM users WHERE type = 1";
 $sqlreports = "SELECT report_id, reporter_id, reported_id, report FROM reports";
-
-// Add search criteria if provided
-// if ($search) {
-//     $query .= " AND (users.id LIKE '%$search%' OR users.name LIKE '%$search%' OR users.email LIKE '%$search%')";
-//     // $sqladmin .= " AND (id LIKE '%$search%' OR name LIKE '%$search%' OR email LIKE '%$search%')";
-// }
 
 $stmttotalfeedback = "SELECT COUNT(*) as total_feedback FROM feedback";
 $resfeedback = $conn->query($stmttotalfeedback);
@@ -44,7 +33,7 @@ $total_users = $result->num_rows;
 $total_reports = $resreports->num_rows;
 $total_feedback = $resfeedback->num_rows;
 
-// Fetch totals
+// fetch totals
 if ($resuser) {
     $row = $resuser->fetch_assoc();
     $total_users = $row['total_users'];

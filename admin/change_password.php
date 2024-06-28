@@ -16,7 +16,7 @@
     <div class="login-page">
         <div class="box">
             <div class="form">
-                <form class="login-form" action="change_password.php" method="POST" id="change-password-form">
+                <form class="login-form" action="php/adminAuth/change_password.php" method="POST" id="change-password-form">
                     <div class="theme-toggle">
                         <i class="fas fa-lightbulb"></i>
                     </div>
@@ -29,16 +29,6 @@
                         </svg>
                         <h2>ConvoConnect</h2>
                     </div>
-                    <?php
-                    if (isset($_SESSION['error_message'])) {
-                        echo "<div class='alert alert-danger'>" . $_SESSION['error_message'] . "</div>";
-                        unset($_SESSION['error_message']);
-                    }
-                    if (isset($_SESSION['success_message'])) {
-                        echo "<div class='alert alert-success'>" . $_SESSION['success_message'] . "</div>";
-                        unset($_SESSION['success_message']);
-                    }
-                    ?>
                     <input type="email" name="email" required placeholder="Enter Your Email" autocomplete="off" />
                     <div class="password-input">
                         <input type="password" name="password" required placeholder="Enter Your Password" id="pass" autocomplete="off" />

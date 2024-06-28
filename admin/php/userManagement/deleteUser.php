@@ -1,7 +1,6 @@
 <?php
-require_once "../../common/php/authentication.php";
+require_once "../../../common/php/authentication.php";
 
-// Disable error reporting output (display errors)
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 error_reporting(E_ALL);
@@ -16,7 +15,7 @@ try {
 
         $userId = $_POST['userId'];
 
-        // Check for existing reports
+        // check for existing reports
         $stmt = $conn->prepare("SELECT COUNT(*) as reportCount FROM reports WHERE reported_id = ?");
         if (!$stmt) {
             throw new Exception('Failed to prepare statement: ' . $conn->error);
@@ -31,7 +30,6 @@ try {
         if ($row['reportCount'] > 0) {
             $response['message'] = 'Cannot delete user: This user has been reported. Please see the reports for more details.';
         } else {
-            // Perform deletion
             $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
             if (!$stmt) {
                 throw new Exception('Failed to prepare statement: ' . $conn->error);

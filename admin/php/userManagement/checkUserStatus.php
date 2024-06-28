@@ -1,12 +1,12 @@
 <?php
-require_once "../../common/php/authentication.php";
+require_once "../../../common/php/authentication.php";
 
 $response = array('success' => false, 'message' => '', 'hasReport' => false, 'hasFeedback' => false);
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $userId = $_GET['userId'];
 
-    // Check if the user has reports
+    // check if the user has reports
     $stmt = $conn->prepare("SELECT COUNT(*) FROM reports WHERE reporter_id = ?");
     $stmt->bind_param("i", $userId);
     if ($stmt->execute()) {
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
     $stmt->close();
 
-    // Check if the user has feedback
+    // check if the user has feedback
     $stmt = $conn->prepare("SELECT COUNT(*) FROM feedback WHERE user_id = ?");
     $stmt->bind_param("i", $userId);
     if ($stmt->execute()) {

@@ -40,11 +40,8 @@ function getUserByEmail($email)
 function registerUser($name, $email, $password, $type)
 {
     global $conn;
-
-    // Hash the password before storing it
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-    // Insert the new user into the database
     $stmt = $conn->prepare("INSERT INTO users (name, email, password, type) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("sssi", $name, $email, $hashed_password, $type);
     $success = $stmt->execute();
@@ -54,6 +51,11 @@ function registerUser($name, $email, $password, $type)
 
 function isAuthenticated()
 {
+    //TODO: THIS RETURN IS FOR TESTING ONLY
+    //// non-admin in group ID=15
+    //return new User(27, 'david.thomas@example.com', 'catlover', 'David Thomas', 'https://cataas.com/cat?bust=718.607203772857&width=64&height=64', 0, '2024-06-15 12:06:24');
+    return new User(909090, "example@domain.com", "pass", "example", "https://cataas.com/cat?size=64", 0, date('Y-m-d H:i:s'),);
+
     if (isset($_SESSION['user'])) {
         return $_SESSION['user'];
     } elseif (isset($_SESSION['admin'])) {

@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
-include_once "../../common/php/authentication.php";
+include_once "../../../common/php/authentication.php";
 session_start();
 
 if (isset($_POST['userIds']) && is_array($_POST['userIds'])) {
@@ -16,7 +16,7 @@ if (isset($_POST['userIds']) && is_array($_POST['userIds'])) {
     foreach ($userIds as $userId) {
         $userId = intval($userId);
 
-        // Check for feedback
+        // check for feedback
         $feedbackResult = $conn->query("SELECT COUNT(*) FROM feedback WHERE user_id = $userId");
         $feedbackCount = $feedbackResult->fetch_row()[0];
         if ($feedbackCount > 0) {
@@ -24,7 +24,7 @@ if (isset($_POST['userIds']) && is_array($_POST['userIds'])) {
             continue;
         }
 
-        // Check for reports made by the user
+        // check for reports made by the user
         $reportResult = $conn->query("SELECT COUNT(*) FROM reports WHERE reporter_id = $userId");
         $reportCount = $reportResult->fetch_row()[0];
         if ($reportCount > 0) {
@@ -32,7 +32,7 @@ if (isset($_POST['userIds']) && is_array($_POST['userIds'])) {
             continue;
         }
 
-        // Check for reports against the user
+        // check for reports against the user
         $reportedResult = $conn->query("SELECT COUNT(*) FROM reports WHERE reported_id = $userId");
         $reportedCount = $reportedResult->fetch_row()[0];
         if ($reportedCount > 0) {
@@ -40,7 +40,7 @@ if (isset($_POST['userIds']) && is_array($_POST['userIds'])) {
             continue;
         }
 
-        // Delete the user if no dependencies found
+        // delete the user if no dependencies found
         if ($conn->query("DELETE FROM users WHERE id = $userId") === TRUE) {
             $deletedUsers[] = $userId;
         }

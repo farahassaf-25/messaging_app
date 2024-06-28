@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include_once "../../common/php/authentication.php";
+include_once "../../../common/php/authentication.php";
 
 $errors = [];
 
@@ -19,10 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['success_message'] = "Logged in successfully.";
 
         if ($user->type === 1) {
-            header("Location: ../dashboard.php");
+            header("Location: ../../dashboard.php");
         } else {
             $_SESSION['error_message'] = "Not an Admin!";
-            header("Location: ./index.php");
+            header("Location: ../../login_admin.php");
         }
         exit();
     } else {
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $_SESSION['error_message'] = "Admin is not registered.";
         }
-        header("Location: ../login_admin.php");
+        header("Location: ../../login_admin.php");
         exit();
     }
 }

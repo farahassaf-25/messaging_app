@@ -1,13 +1,13 @@
 $(document).ready(function() {
     var currentViewButton = null;
 
-    // Disable Delete Reports button initially
+    // disable delete reports initially
     $('#deleteSelectedReportsBtn').prop('disabled', true);
 
-    // Disable Delete button in each row initially
+    // disable delete button in each row initially
     $('.deleteReportBtn').prop('disabled', true);
 
-    // Handle view report button click
+    // view report
     $(document).on('click', '.viewReportBtn', function() {
         var userId = $(this).data('report-id');
         var modal = $('#viewReportModal');
@@ -18,7 +18,7 @@ $(document).ready(function() {
 
         if (userId) {
             $.ajax({
-                url: 'php/getReport.php',
+                url: 'php/reportManagement/getReport.php',
                 type: 'GET',
                 data: { userId: userId },
                 success: function(response) {
@@ -49,7 +49,7 @@ $(document).ready(function() {
         }
     });
 
-    // Remove opacity class when the modal is closed
+    // remove opacity class when the modal is closed
     $('#viewReportModal').on('hidden.bs.modal', function() {
         if(currentViewButton) {
             currentViewButton.addClass('viewed');
@@ -63,20 +63,18 @@ $(document).ready(function() {
     var reportIdToDelete = null;
     var rowToDelete = null;
 
-    // Handle delete report button click
+    // delete report
     $(document).on('click', '.deleteReportBtn', function() {
         reportIdToDelete = $(this).data('report-id');
         rowToDelete = $(this).closest('tr');
-
-        // Show the confirmation modal
         $('#deleteConfirmationModal').modal('show');
     });
 
-    // Handle confirm delete button click
+    // confirm delete
     $('#confirmDeleteBtn').on('click', function() {
         if (reportIdToDelete) {
             $.ajax({
-                url: 'php/deleteReport.php',
+                url: 'php/reportManagement/deleteReport.php',
                 type: 'POST',
                 data: { reportId: reportIdToDelete },
                 success: function(response) {
@@ -98,32 +96,30 @@ $(document).ready(function() {
                 }
             });
         }
-
-        // Hide the confirmation modal
         $('#deleteConfirmationModal').modal('hide');
 
     });
 
-    // Select or Deselect all checkboxes
+    // select or deselect all checkboxes
     $('#selectAllReports').click(function () {
         $('.selectReportCheckbox').prop('checked', this.checked);
         $('#deleteSelectedReportsBtn').prop('disabled', !this.checked);
     });
 
-    // Update select all checkbox based on individual checkboxes and enable/disable delete button
+    // update select all checkbox based on individual checkboxes and enable/disable delete button
     $(document).on('change', '.selectReportCheckbox', function () {
         const anyChecked = $('.selectReportCheckbox:checked').length > 0;
         $('#selectAllReports').prop('checked', $('.selectReportCheckbox:checked').length === $('.selectReportCheckbox').length);
         $('#deleteSelectedReportsBtn').prop('disabled', !anyChecked);
     });
 
-    // Delete selected reports on button click
+    // delete selected reports on button click
     $('#confirmDeleteSelectedReportsBtn').click(function () {
         const selectedReports = $('.selectReportCheckbox:checked').map(function () {
             return $(this).val();
         }).get();
 
-        // Filter viewed and non-viewed reports
+        // filter viewed and non-viewed reports
         const viewedReports = selectedReports.filter(function (reportId) {
             return $('input[value="' + reportId + '"]').closest('tr').find('.viewReportBtn').hasClass('viewed');
         });
@@ -134,25 +130,23 @@ $(document).ready(function() {
 
         if (viewedReports.length > 0) {
             $.ajax({
-                url: 'php/deleteReports.php',
+                url: 'php/reportManagement/deleteReports.php',
                 type: 'POST',
                 data: { report_ids: viewedReports },
                 success: function (response) {
-                    response = JSON.parse(response); // Parse the JSON response
+                    response = JSON.parse(response); 
                     if (response.success) {
                         viewedReports.forEach(function (reportId) {
                             $('input[value="' + reportId + '"]').closest('tr').remove();
                         });
 
-                        // Hide the modal and remove the backdrop
                         $('#deleteSelectedReportsModal').modal('hide');
                         $('body').removeClass('modal-open');
                         $('.modal-backdrop').remove();
                         
                         $('#selectAllReports').prop('checked', false);
-                        $('#deleteSelectedReportsBtn').prop('disabled', true); // Disable delete button
+                        $('#deleteSelectedReportsBtn').prop('disabled', true);
                         
-                        // Show success alert
                         let message = 'Viewed reports have been successfully deleted.';
                         if (notViewedReports.length > 0) {
                             message += ' Some reports could not be deleted because they were not viewed.';
@@ -171,16 +165,15 @@ $(document).ready(function() {
         }
     });
 
-    // Store initial table content
     var initialTableContent = $('#reportsTableBody').html();
 
-    // Search report by ID, Reporter ID, or Reported ID
+    // rearch report by ID, Reporter ID, or Reported ID
     $('#searchReport').on('input', function() {
         var searchTerm = $(this).val().trim();
 
         if (searchTerm) {
             $.ajax({
-                url: 'php/searchReport.php',
+                url: 'php/reportManagement/searchReport.php',
                 type: 'GET',
                 data: { search_term: searchTerm },
                 success: function(response) {

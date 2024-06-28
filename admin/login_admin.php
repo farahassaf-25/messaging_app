@@ -16,7 +16,7 @@
     <div class="login-page">
         <div class="box">
             <div class="form">
-                <form method="POST" class="login-form" action="php/login_admin.php" id="login-form">
+                <form method="POST" class="login-form" action="php/adminAuth/login_admin.php" id="login-form">
                     <div class="theme-toggle">
                         <i class="fas fa-lightbulb"></i>
                     </div>
@@ -29,17 +29,6 @@
                         </svg>
                         <h2>ConvoConnect</h2>
                     </div>
-                    <?php
-                    session_start();
-                    if (isset($_SESSION['error_message'])) {
-                        echo "<script>alert('" . $_SESSION['error_message'] . "');</script>";
-                        unset($_SESSION['error_message']);
-                    }
-                    if (isset($_SESSION['success_message'])) {
-                        echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
-                        unset($_SESSION['success_message']);
-                    }
-                    ?>
                     <input type="email" name="email" required placeholder="Enter Your Email" id="email" autocomplete="off" />
                     <div class="password-input">
                         <input type="password" name="password" required placeholder="Enter Your Password" id="pass" autocomplete="off" />
@@ -53,28 +42,9 @@
             </div>
         </div>
     </div>
-    <div id="liveAlertPlaceholder"></div>
 
-    <script src="../../common/scripts/appendAlert.js"></script>
     <script src="scripts/login.js"></script>
     <script src="scripts/switch_mode.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const successMessage = "<?php echo isset($_SESSION['success_message']) ? $_SESSION['success_message'] : ''; ?>";
-            const errorMessage = "<?php echo isset($_SESSION['error_message']) ? $_SESSION['error_message'] : ''; ?>";
-
-            if (successMessage) {
-                appendAlert(successMessage, "success", true, 3000);
-                <?php unset($_SESSION['success_message']); ?>
-            }
-
-            if (errorMessage) {
-                appendAlert(errorMessage, "danger", true, 3000);
-                <?php unset($_SESSION['error_message']); ?>
-            }
-        });
-    </script>
 </body>
 
 </html>

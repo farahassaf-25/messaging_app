@@ -1,46 +1,45 @@
 $(document).ready(function() {
 
-// Store initial table content
 var initialTableContent = $('#adminTableBody').html();
 
-// Search user by ID, Name, or Email
-$('#searchAdmin').on('input', function() {
-    var searchTerm = $(this).val().trim();
+    // Search user by ID, Name, or Email
+    $('#searchAdmin').on('input', function() {
+        var searchTerm = $(this).val().trim();
 
-    if (searchTerm) {
-        $.ajax({
-            url: 'php/searchAdmin.php',
-            type: 'GET',
-            data: { search_term: searchTerm },
-            success: function(response) {
-                response = JSON.parse(response);
-                if (response.success) {
-                    var admins = response.admins;
-                    var adminRows = admins.map(function(admin) {
-                        return "<tr>" +
-                         "<td>" + admin.id + "</td>" +
-                         "<td>" + admin.name + "</td>" +
-                         "<td>" + admin.email + "</td>" +
-                         "<td><button id='editAdminBtn' class='btn btn-success btn-sm' data-bs-toggle='modal' data-bs-target='#editAdminModal'>Update</button></td>" +
-                         "<td><button class='btn btn-danger btn-sm'>Delete</button></td>" +
-                         "</tr>";
-                    }).join('');
+        if (searchTerm) {
+            $.ajax({
+                url: 'php/adminManagement/searchAdmin.php',
+                type: 'GET',
+                data: { search_term: searchTerm },
+                success: function(response) {
+                    response = JSON.parse(response);
+                    if (response.success) {
+                        var admins = response.admins;
+                        var adminRows = admins.map(function(admin) {
+                            return "<tr>" +
+                            "<td>" + admin.id + "</td>" +
+                            "<td>" + admin.name + "</td>" +
+                            "<td>" + admin.email + "</td>" +
+                            "<td><button id='editAdminBtn' class='btn btn-success btn-sm' data-bs-toggle='modal' data-bs-target='#editAdminModal'>Update</button></td>" +
+                            "<td><button class='btn btn-danger btn-sm'>Delete</button></td>" +
+                            "</tr>";
+                        }).join('');
 
-                    $('#adminTableBody').html(adminRows);
-                } else {
-                    $('#adminTableBody').html("<tr><td colspan='7'>No admins found</td></tr>");
+                        $('#adminTableBody').html(adminRows);
+                    } else {
+                        $('#adminTableBody').html("<tr><td colspan='7'>No admins found</td></tr>");
+                    }
+                },
+                error: function() {
+                    $('#adminTableBody').html("<tr><td colspan='7'>Error searching for admins</td></tr>");
                 }
-            },
-            error: function() {
-                $('#adminTableBody').html("<tr><td colspan='7'>Error searching for admins</td></tr>");
-            }
-        });
-    } else {
-        $('#adminTableBody').html(initialTableContent); 
-    }
-});
+            });
+        } else {
+            $('#adminTableBody').html(initialTableContent); 
+        }
+    });
 
-    // Handle add admin form submission
+    // add admin
     $('#addAdminForm').on('submit', function(e) {
         e.preventDefault();
         
@@ -68,7 +67,7 @@ $('#searchAdmin').on('input', function() {
         }
 
         $.ajax({
-            url: 'php/addAdmin.php',
+            url: 'php/adminManagement/addAdmin.php',
             type: 'POST',
             data: formData,
             processData: false,
@@ -116,7 +115,7 @@ $('#searchAdmin').on('input', function() {
         }
     });
     
-    // Handle the form submission of admin update
+    // update admin
     $('#editAdminForm').on('submit', function(event) {
         event.preventDefault();
     
@@ -125,7 +124,7 @@ $('#searchAdmin').on('input', function() {
         formData.append('userId', userId);
     
         $.ajax({
-            url: 'php/updateAdmin.php',
+            url: 'php/adminManagement/updateAdmin.php',
             type: 'POST',
             data: formData,
             contentType: false,

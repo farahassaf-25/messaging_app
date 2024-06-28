@@ -1,6 +1,7 @@
 <?php
 
 include "authentication.php";
+include "res.php";
 
 $user = isAuthenticated();
 if (!($user instanceof User)) {

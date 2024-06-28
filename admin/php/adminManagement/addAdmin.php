@@ -1,7 +1,7 @@
 <?php
-require_once "../../common/php/authentication.php";
+require_once "../../../common/php/authentication.php";
 
-// Enable error reporting
+// enable error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -13,11 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $imageUrl = isset($_POST['imageUrl']) ? $_POST['imageUrl'] : '';
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-    // Handle file upload if imageUrl is not provided
     if (empty($imageUrl) && isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $imageTmpPath = $_FILES['image']['tmp_name'];
         $imageName = $_FILES['image']['name'];
-        $uploadDir = '../../uploads/';
+        $uploadDir = '../../../uploads/';
         $imageUrl = $uploadDir . $imageName;
 
         if (!move_uploaded_file($imageTmpPath, $imageUrl)) {
@@ -25,10 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
 
-        // Save relative URL to imageUrl in database
+        // save relative URL to imageUrl in database
         $relativeImageUrl = 'uploads/' . $imageName;
     } elseif (!empty($imageUrl)) {
-        $relativeImageUrl = $imageUrl; // Use provided URL
+        $relativeImageUrl = $imageUrl; //use provided URL
     } else {
         echo json_encode(['success' => false, 'message' => 'Image upload failed or no image provided']);
         exit;

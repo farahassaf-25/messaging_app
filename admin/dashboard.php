@@ -60,7 +60,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 1) {
                             <?php echo isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'Admin Name'; ?>
                         </a>
                     </li>
-
                     <li class="nav-item logout">
                         <a class="btn nav-link text-white d-flex align-items-center" href="logout.php"><i class="fas fa-arrow-right me-2"></i> Logout</a>
                     </li>
@@ -417,49 +416,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 1) {
         </div>
     </div>
 
-
-    <!-- Delete Admin Modal -->
-    <!-- <div class="modal fade" id="deleteAdminModal" tabindex="-1" aria-labelledby="deleteAdminModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteAdminModalLabel">Delete Admin</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete admin <span id="adminToDeleteName"></span>?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="confirmDeleteAdminBtn">Delete</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-
-    <!-- Delete All Users Modal -->
-    <!-- <div class="modal fade" id="deleteAllUsers" tabindex="-1" aria-labelledby="deleteAllUsersModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteAllUsersModalLabel">Delete All Users</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete all users?</p>
-                </div>
-                <div class="modal-footer">
-                    <form method="POST" action="dashboard.php">
-                        <input type="hidden" name="checkUsers" value="1">
-                        <button type="submit" class="btn btn-danger" name="deleteAllUsers">Delete All</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
     <!-- Delete Selected Users Modal -->
     <div class="modal fade" id="deleteSelectedUsersModal" tabindex="-1" aria-labelledby="deleteSelectedUsersModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -497,26 +453,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 1) {
             </div>
         </div>
     </div>
-
-    <!-- Modal -->
-    <!-- <div class="modal fade" id="usersWithReportsFeedbackModal" tabindex="-1" aria-labelledby="usersWithReportsFeedbackModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="usersWithReportsFeedbackModalLabel">Users with Reports or Feedback</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Some users have reports or feedback.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-
 
     <!-- Add Admin Modal -->
     <div class="modal fade" id="addAdminModal" tabindex="-1" aria-labelledby="addAdminModalLabel" aria-hidden="true">

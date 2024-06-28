@@ -12,21 +12,10 @@
 </head>
 
 <body>
-    <?php
-    session_start();
-    if (isset($_SESSION['error_message'])) {
-        echo "<script>alert('" . $_SESSION['error_message'] . "');</script>";
-        unset($_SESSION['error_message']);
-    }
-    if (isset($_SESSION['success_message'])) {
-        echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
-        unset($_SESSION['success_message']);
-    }
-    ?>
     <div class="login-page">
         <div class="box">
             <div class="form">
-                <form class="login-form" action="php/register_admin.php" method="POST">
+                <form class="login-form" action="php/adminAuth/register_admin.php" method="POST">
                     <div class="theme-toggle">
                         <i class="fas fa-lightbulb"></i>
                     </div>

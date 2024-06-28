@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    // handle view feedback button click
+    // view feedback
     $('.viewFeedbackBtn').on('click', function() {
         var userId = $(this).data('user-id');
         var modal = $('#viewFeedbackModal');
@@ -11,7 +11,7 @@ $(document).ready(function() {
         if (userId) {
             // fetch feedback for the user
             $.ajax({
-                url: 'php/getFeedback.php',
+                url: 'php/feedbackManagement/getFeedback.php',
                 type: 'GET',
                 data: { userId: userId },
                 success: function(response) {
@@ -39,13 +39,13 @@ $(document).ready(function() {
         }
     });
 
-    // handle delete feedback button click
+    // delete feedback
     $('#deleteFeedbackBtn').on('click', function() {
         var feedbackId = $(this).data('feedback-id');
 
         if (feedbackId) {
             $.ajax({
-                url: 'php/deleteFeedback.php',
+                url: 'php/feedbackManagement/deleteFeedback.php',
                 type: 'POST',
                 data: { feedbackId: feedbackId },
                 success: function(response) {
@@ -54,15 +54,7 @@ $(document).ready(function() {
                         response = JSON.parse(response);
                         if (response.success) {
                             $('#feedbackContent').text('Feedback deleted successfully.');
-                            $('#viewFeedbackModal').modal('hide');
-
-                            var feedbackButtonClass = response.feedbackButtonClass || '';
-                            if (feedbackButtonClass) {
-                                $('#user-' + feedbackId + ' .viewFeedbackBtn').addClass(feedbackButtonClass);
-                            }
-
-                            $('#user-' + feedbackId).find('.viewFeedbackBtn').removeClass('btn-secondary').addClass('btn-secondary opacity-50').text('View');
-
+                            $('#viewFeedbackModal').modal('hide'); 
                         } else {
                             $('#feedbackContent').text('Failed to delete feedback: ' + response.message);
                         }

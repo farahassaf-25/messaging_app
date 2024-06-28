@@ -46,7 +46,7 @@
                         </a>
                     </li>
                     <li class="nav-item mb-3">
-                        <a class="nav-link" href="">
+                        <a class="nav-link" href="user/login.php">
                             <i class="fas fa-solid fa-arrow-right"></i>
                             <span class="nav-text">Login</span>
                         </a>
@@ -68,7 +68,7 @@
                                 <div class="col-lg-6">
                                     <h1 class="display-4 fw-bold mb-5">Welcome to <span class="text-brand tracking-in-contract-bck">CONVOCONNECT</span><br> your messaging app</h1>
                                     <div class="btn-container">
-                                        <a class="btn-content ping" href="">
+                                        <a class="btn-content ping" href="user/login.php">
                                             <span class="btn text-white">Get Started</span>
                                             <span class="icon-arrow">
                                                 <svg width="66px" height="43px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

@@ -1,24 +1,24 @@
 <?php
 
-require_once "../../common/php/authentication.php";
+require_once "../../../common/php/authentication.php";
 
 if (isset($_GET['search_term'])) {
     $searchTerm = $_GET['search_term'];
     $likeTerm = '%' . $searchTerm . '%';
 
-    $stmt = $conn->prepare("SELECT id, name, email FROM users WHERE (id LIKE ? OR name LIKE ? OR email LIKE ?) and type = 0");
+    $stmt = $conn->prepare("SELECT id, name, email FROM users WHERE (id LIKE ? OR name LIKE ? OR email LIKE ?) and type = 1");
     $stmt->bind_param("sss", $likeTerm, $likeTerm, $likeTerm);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $users = [];
+        $admins = [];
         while ($row = $result->fetch_assoc()) {
-            $users[] = $row;
+            $admins[] = $row;
         }
-        echo json_encode(['success' => true, 'users' => $users]);
+        echo json_encode(['success' => true, 'admins' => $admins]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'No users found']);
+        echo json_encode(['success' => false, 'message' => 'No admins found']);
     }
 
     $stmt->close();

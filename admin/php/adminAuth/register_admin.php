@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once "../../common/php/authentication.php";
+include_once "../../../common/php/authentication.php";
 
 $errors = [];
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['user_name'] = $name;
                 $_SESSION['user_email'] = $email;
                 $_SESSION['user_type'] = $type;
-                $_SESSION['user_image'] = '../assets/defaultProfile.webp'; // Set default profile image
+                $_SESSION['user_image'] = '../assets/defaultProfile.webp'; // set default profile image
                 $_SESSION['success_message'] = "Registered Successfully. Hello $name!";
                 header("Location: ../dashboard.php");
                 exit();
@@ -42,10 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    header("Location: ../register_admin.php");
+    header("Location: ../admin/register_admin.php");
     exit();
 } else {
-    header("Location: ../register_admin.php");
+    header("Location: ../admin/register_admin.php");
     exit();
 }
 

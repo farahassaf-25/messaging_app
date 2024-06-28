@@ -1,29 +1,28 @@
 <?php
 
-require_once "../../common/php/authentication.php";
+require_once "../../../common/php/authentication.php";
 
 if (isset($_GET['search_term'])) {
     $searchTerm = $_GET['search_term'];
-    $likeTerm = '%' . $searchTerm . '%';
 
-    $stmt = $conn->prepare("SELECT id, name, email FROM users WHERE (id LIKE ? OR name LIKE ? OR email LIKE ?) and type = 1");
+    $stmt = $conn->prepare("SELECT * FROM reports WHERE report_id LIKE ? OR reporter_id LIKE ? OR reported_id LIKE ?");
+    $likeTerm = '%' . $searchTerm . '%';
     $stmt->bind_param("sss", $likeTerm, $likeTerm, $likeTerm);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $admins = [];
+        $reports = [];
         while ($row = $result->fetch_assoc()) {
-            $admins[] = $row;
+            $reports[] = $row;
         }
-        echo json_encode(['success' => true, 'admins' => $admins]);
+        echo json_encode(['success' => true, 'reports' => $reports]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'No admins found']);
+        echo json_encode(['success' => false, 'message' => 'No reports found']);
     }
 
     $stmt->close();
 } else {
     echo json_encode(['success' => false, 'message' => 'No search term provided']);
 }
-
 $conn->close();
