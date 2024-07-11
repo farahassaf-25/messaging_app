@@ -29,7 +29,7 @@ $(document).ready(function() {
                             reportReason.text(response.report || 'No report available for this user.');
                             $('#deleteReportBtn').data('report-id', response.report_id || '');
                             currentViewButton.addClass('viewed');
-                            currentViewButton.closest('tr').find('.deleteReportBtn').prop('disabled', false); // Enable delete button for this row
+                            currentViewButton.closest('tr').find('.deleteReportBtn').prop('disabled', false); //enable delete button for this row
                             modal.modal('show');
                         } else {
                             reportReason.text('Failed to load report: ' + response.message);

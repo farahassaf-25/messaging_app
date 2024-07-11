@@ -1,5 +1,5 @@
 <?php
-include_once "../../../common/php/authentication.php";
+require_once "../../../common/php/authentication.php";
 
 // get report ID from POST data
 $reportId = $_POST['reportId'];

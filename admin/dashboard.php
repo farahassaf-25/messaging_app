@@ -28,7 +28,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 1) {
 </head>
 
 <body>
-    <?php include_once 'php/admin_dashboard.php'; ?>
+    <?php require_once 'php/admin_dashboard.php'; ?>
     <div class="container-fluid p-3">
         <div class="row">
             <!-- sidebar  -->

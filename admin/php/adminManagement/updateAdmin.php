@@ -1,5 +1,5 @@
 <?php
-include_once "../../../common/php/authentication.php";;
+require_once "../../../common/php/authentication.php";;
 
 $response = array('success' => false, 'message' => '');
 

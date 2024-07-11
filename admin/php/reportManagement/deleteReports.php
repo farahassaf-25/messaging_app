@@ -1,6 +1,6 @@
 <?php
 
-include_once "../../../common/php/authentication.php";
+require_once "../../../common/php/authentication.php";
 
 if (isset($_POST['report_ids'])) {
     $reportIds = $_POST['report_ids'];

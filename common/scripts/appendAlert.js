@@ -91,7 +91,7 @@ const appendAlert = (
 
   const wrapper = $("<div>");
   wrapper.append(alertDiv);
-  placeholder.append(wrapper);
+  placeholder.prepend(wrapper); // prepend => newest at the top
 
   if (moreDetails) {
     wrapper.append(moreDetailsButton(moreDetails)).append("<br/>");

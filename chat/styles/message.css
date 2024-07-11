@@ -1,0 +1,65 @@
+.messageRow {
+  /* display: flex; */
+  align-items: start;
+  width: 100%;
+}
+.messageRow.me {
+  align-items: end;
+}
+.messageRow .messageWrapper {
+  display: flex;
+  align-items: left;
+  flex-direction: column;
+  align-items: start;
+}
+.messageRow.me .messageWrapper {
+  align-items: end;
+}
+
+.messageRow .name {
+  color: var(--color-primary);
+}
+.messageRow .date {
+  color: var(--color-text-disabled);
+}
+.messageRow .name,
+.messageRow .date {
+  margin: 0 0;
+  opacity: 0;
+  font-size: 0pt;
+  transition: margin 0.15s ease-out, opacity 0.3s ease-out, font-size 0.15s ease-out;
+}
+.messageRow:hover .date {
+  margin: 4px 16px;
+  opacity: 1;
+  font-size: 8pt;
+}
+.messageRow:hover .name {
+  opacity: 1;
+  font-size: 10pt;
+}
+
+.messageRow .message {
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-background);
+  box-shadow: var(--shadow-params);
+}
+.messageRow.me .message {
+  color: var(--color-surface);
+  background: var(--color-primary);
+}
+.messageRow.me .message * {
+  color: var(--color-surface);
+}
+
+.messageRow .message img {
+  max-width: 500px;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}

@@ -13,6 +13,8 @@ class UserSimple
         // remove the URL validation here since it will be handled in the derived class
         $this->email = $email;
         $this->imageURL = $imageURL;
+        $this->email = $email;
+        $this->imageURL = filter_var($imageURL, FILTER_VALIDATE_URL) ? $imageURL : null;
     }
 
     static function fromObject($object)
@@ -21,6 +23,7 @@ class UserSimple
     }
 }
 
+/** User model matching the MySQL table */
 class User extends UserSimple
 {
     static $dateFormat = 'Y-m-d H:i:s';
@@ -28,6 +31,8 @@ class User extends UserSimple
     public $id;
     public $password;
     public $name;
+    public $email;
+    public $imageURL;
     public $type;
     public $createdAt;
 
@@ -54,6 +59,12 @@ class User extends UserSimple
         $this->id = intval($id);
         $this->password = $password;
         $this->name = $name;
+        parent::__construct($email, $imageURL);
+        $this->id = intval($id);
+        $this->email = $email;
+        $this->password = $password; // TODO: encrypt or use token
+        $this->name = $name;
+        $this->imageURL = $imageURL;
         $this->type = intval($type);
         $this->createdAt = $createdAtVerified->format(User::$dateFormat);
     }

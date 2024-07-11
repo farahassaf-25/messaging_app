@@ -1,133 +1,207 @@
 const users = {};
 
-const listMembers = () => {
-  const container = document.getElementById("membersContainer");
-  container.innerText = "Loading...";
-  $.ajax({
-    type: "GET",
-    timeout: 10000,
-    url: "../common/php/users.php",
-    error: (jqXHR, status, e) => {
-      console.log(jqXHR);
-      console.error(status, "AJAX request timed out:", `(${jqXHR.status})`, e);
-      container.innerHTML = "";
+const setUserChecked = (id, checked) => {
+  //? Should fix if it happens
+  if (!users.hasOwnProperty(id)) throw new Error(`Cannot toggle selection of missing user: ${email}`);
+  users[id].selected = checked;
+};
 
-      const isAuthError = jqXHR.status === 401;
-      const msg = `Error while loading the list of users: (${jqXHR.status}) ${e}`;
-      const type = isAuthError ? "danger" : "warning";
+const ajaxFailHandler = (jqXHR, status, e) => {
+  console.log(jqXHR);
+  console.error(status, "AJAX request timed out:", `(${jqXHR.status})`, e);
+  container.empty();
+  const isAuthError = jqXHR.status === 401;
+  return isAuthError //
+    ? alertAuth()
+    : appendAlert(
+        `Error while loading the list of users: (${jqXHR.status}) ${e}`, //
+        "warning",
+        false,
+        0,
+        jqXHR.responseText
+      );
+};
 
-      const loginButton = isAuthError ? document.createElement("button") : null;
-      if (loginButton) {
-        loginButton.classList.add("btn", "btn-primary");
-        loginButton.innerHTML = "Login";
-        loginButton.addEventListener("click", () => {
-          window.location.href = "../account/login.html";
-        });
-        return appendAlert(msg, type, false, 0, loginButton);
-      }
+const listUsers = async () => {
+  const container = $(".usersContainer");
+  container.text("Loading...");
 
-      return appendAlert(msg, type);
-    },
-    success: (membersJ) => {
+  $.get("../common/php/users.php") //
+    .done((usersFromServer) => {
+      console.log(typeof usersFromServer, usersFromServer);
       try {
-        console.log(membersJ);
-        const members = JSON.parse(membersJ);
-        if (!members.length) {
-          container.innerHTML = "No members found";
+        console.log(usersFromServer);
+        if (!usersFromServer.length) {
+          container.text("No members found");
           return;
         }
+        usersContainer(
+          //
+          "Search or select users",
+          "usersContainer",
+          (user) => {
+            user.selected = false;
+            users[user.id] = user;
 
-        container.innerHTML = "";
-        for (const member of members) {
-          users[member.email] = { member, selected: false };
-          const card = memberCard(
-            member.email, //
-            member.imageURL, //
-            (ev) => {
-              users[member.email].selected = ev.currentTarget.checked;
-            }
-          );
-          container.appendChild(card);
-        }
+            const viewButton = $("<button>") //
+              .addClass("colored")
+              .append($("<i>").addClass("fa-solid fa-eye"))
+              .append(" Profile")
+              .on("click", () => {
+                window.open(`../user/profile.php?id=${user.id}`, "_blank");
+              });
+            return userCard(user, setUserChecked, false, "#0000", viewButton);
+          },
+          ...usersFromServer
+        ).appendTo($(".screen"));
+        //
       } catch (err) {
         console.error(err);
         appendAlert(`Error while loading the list of users: ${err}`, "danger");
-        container.innerHTML = `Failed to load the list of users.`;
+        container.text(`Failed to load the list of users.`);
       }
-    },
-  });
+    })
+    .fail(ajaxFailHandler);
 };
 
 const search = (part) => {
+  const membersContainer = $(".userContainer");
+
+  const searching = typeof part !== "string" || !part.length;
+  membersContainer[`${searching ? "remove" : "add"}Class`]("searching");
+
   const filtered = Object.values(users) //
-    .filter((user) => user.member.email.includes(part));
+    .filter((user) => user.name.includes(part || ""));
 
-  const container = document.getElementById("membersContainer");
-  container.innerHTML = "";
+  if (!filtered.length) {
+    membersContainer.html("<p align='center'>(No members found)</p>");
+    return;
+  }
 
+  membersContainer.empty();
   for (const user of filtered) {
-    const card = memberCard(
-      user.member.email, //
-      user.member.imageURL, //
-      (ev) => {
-        users[user.member.email].selected = ev.currentTarget.checked;
-      }
-    );
-    container.appendChild(card);
+    const selected = user.selected;
+    const card = memberCard(user, setUserChecked, selected);
+    membersContainer.append(card);
   }
 };
 
-const createGroup = () => {
+const createGroup = async () => {
   const nameInput = document.getElementById("groupName");
   const name = nameInput.value;
   const members = Object.values(users) //
-    .filter((it) => it.selected)
-    .map((it) => it.member);
+    .filter((it) => it.selected);
 
   if (!name.length) {
     appendAlert("Please enter a group name", "warning", true, 5000);
     nameInput.focus();
     return;
   }
-  if (members.length < 2) {
-    appendAlert("Please select 2 or more members to be added to the group", "warning", true, 5000);
+  if (members.length < 1) {
+    appendAlert("Please select 1 or more members to be added to the group", "warning", true, 5000);
     return;
   }
-  $.ajax({
-    method: "POST",
-    timeout: 10000,
-    url: "./php/groups.php",
-    //contentType: "application/json; charset=utf-8",
-    data: {
+
+  const imageURL = $("#groupImage").attr("src");
+
+  const res = await fetchGroupSafe(
+    "createGroup", //
+    "POST",
+    "Failed to create the group",
+    {
       name,
       members: JSON.stringify(members),
-    },
-    error: (jqXHR, status, e) => {
-      console.error("AJAX request timed out:", status, e, jqXHR);
+      imageURL,
+    }
+  );
 
-      let message = e; // main error message
-
-      // try to extract the info of the error thrown while creating the group
-      if (jqXHR.responseText.includes("error")) {
-        const lastLine = jqXHR.responseText.includes("\n") ? jqXHR.responseText.split("\n").pop() : jqXHR.responseText;
-        try {
-          const errorObj = JSON.parse(lastLine);
-          if (errorObj.error) message = errorObj.error;
-        } catch (err) {} // ignore
-      }
-
-      appendAlert(`Error while creating the group: ${message}`, "danger");
-    },
-    success: (res) => {
-      appendAlert(`Group created successfully: ID=${res.groupID}`, "success", true, 6000);
-      console.success(res);
-    },
-  });
+  const id = res.groupID;
+  const aboutButton = $("<button>") //
+    .text("About Group")
+    .on("click", () => {
+      window.location.href = `../groups/about.php?groupID=${id}`;
+    });
+  const openButton = $("<button>") //
+    .addClass("colored")
+    .text("Open Group")
+    .on("click", () => {
+      window.location.href = `../chat/group.php?groupID=${id}`;
+    });
+  //? Auto continue after 5s
+  let seconds = 5;
+  const i = setInterval(() => {
+    if (seconds <= 0) {
+      clearInterval(i);
+      openButton.trigger("click");
+      return;
+    }
+    openButton.text(`Open Group (${seconds}s)`);
+    seconds--;
+  }, 1000);
+  console.log("Group created successfully:", res);
+  appendAlert(`Group created successfully: ID=${res.groupID}`, "success", false, 0, null, aboutButton[0], openButton[0]);
 };
 
-$(document).ready(listMembers);
+// document ready
+$(async () => {
+  listUsers();
 
-$("#searchMembers").on("input", () => {
-  search(ev.target.value);
+  const searchMembersInput = $("#searchMembers");
+  searchMembersInput.on("input", () => {
+    search(searchMembersInput.val().trim() || ""); //! $(this) -- t.nodeName is undefined
+  });
+
+  const myInfo = await getMyInfo();
+  if (myInfo?.success) $("nav .nav-link img.pfp").attr("src", myInfo.me.imageURL);
+  console.log(myInfo?.me);
+
+  $("#createButton").on("click", createGroup);
+
+  const groupNameInput = $("#groupName");
+  groupNameInput.on("keypress", async (ev) => {
+    if (ev.key === "Enter") await createGroup();
+  });
+  groupNameInput.trigger("focus");
+
+  const imageURLInput = $("#imageURLInput");
+  const imageURLRandomCatIcon = $("#imageURLRandomCatIcon");
+  const imageURLPreview = $("#imageURLPreview");
+
+  imageURLInput.on("input", () => {
+    const value = imageURLInput.val().trim();
+    if (!value.length) return;
+    try {
+      const url = new URL(value);
+      imageURLPreview.attr("src", url.toString());
+    } catch (e) {}
+  });
+  $("#imageURLRandomCat").on("click", async () => {
+    imageURLRandomCatIcon.addClass("fa-bounce");
+    const catRaw = await fetch("https://cataas.com/cat/cute?json=true");
+    const cat = await catRaw.json();
+    const url = `https://cataas.com/cat/${cat._id}`;
+    imageURLPreview.attr("src", url);
+    imageURLInput.val(url);
+    imageURLInput.trigger("focus");
+    setTimeout(() => {
+      imageURLRandomCatIcon.removeClass("fa-bounce");
+    }, 1000); // 1.6s just in case it ends so fast
+  });
+
+  const groupImage = $("#groupImage");
+  const imageURLModal = $("#imageURLModal");
+  imageURLModal.on("show.bs.modal", () => {
+    imageURLInput.val(groupImage.attr("src"));
+  });
+  $("#setGroupImage").on("click", () => {
+    const value = imageURLInput.val().trim();
+    if (!value.length) return;
+    try {
+      const url = new URL(value);
+      groupImage.attr("src", url.toString());
+    } catch (e) {
+      return appendAlert(`Invalid URL: ${value}`, "warning", true, 5000);
+    }
+    imageURLModal.modal("hide");
+  });
 });
-$("#createButton").on("click", createGroup);

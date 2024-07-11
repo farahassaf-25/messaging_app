@@ -4,10 +4,13 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `users` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
+  `unique_id` int(255),
+  `status` varchar(255),
   `email` varchar(255) NOT NULL UNIQUE,
   `password` varchar(255) NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `imageURL` varchar(255) DEFAULT NULL,
+  `name` varchar(100),
+  `lname` varchar(100),
+  `imageURL` varchar(255),
   `type` int NOT NULL DEFAULT 0
     COMMENT 'user: 0, admin: 1',
   `createdAt` timestamp NOT NULL DEFAULT NOW(),

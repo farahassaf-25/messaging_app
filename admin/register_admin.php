@@ -48,6 +48,19 @@
 
     <script src="scripts/login.js"></script>
     <script src="scripts/switch_mode.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let errorMessages = "<?php echo json_encode($_SESSION['error_messages']); ?>";
+            if (errorMessages.trim() !== "") {
+                alert(errorMessages);
+            }
+
+            let successMessage = "<?php echo $_SESSION['success_message']; ?>";
+            if (successMessage.trim() !== "") {
+                alert(successMessage);
+            }
+        });
+    </script>
 </body>
 
 </html>

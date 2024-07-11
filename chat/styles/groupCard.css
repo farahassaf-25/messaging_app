@@ -1,0 +1,62 @@
+.groupCard {
+  display: flex;
+  flex-wrap: nowrap;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  padding: 4px;
+  gap: 8px;
+  border: 2px solid transparent;
+}
+.groupCard.selected {
+  background-color: var(--color-background);
+  border: 2px solid var(--color-surface);
+  box-shadow: var(--shadow-params);
+}
+.groupCard.selected:hover {
+  box-shadow: var(--shadow-params-hover);
+}
+.groupCard.selected:active {
+  box-shadow: var(--shadow-params-active);
+}
+.groupCard .pfp {
+  width: 48px;
+  height: 48px;
+}
+.groupCard .info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+.groupCard .row {
+  padding-right: var(--border-radius);
+  display: flex;
+}
+.groupCard .name,
+.groupCard .message {
+  flex: 1;
+}
+.groupCard .date {
+  flex: 0;
+}
+.groupCard .name {
+  font-weight: bold;
+}
+.groupCard .date,
+.groupCard .message {
+  color: var(--color-text-disabled);
+  font-size: small;
+}
+.groupCard .count {
+  font-size: 10pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  color: var(--color-surface);
+  background-color: var(--color-error);
+  margin-right: var(--border-radius);
+}

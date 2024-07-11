@@ -1,0 +1,3 @@
+.local/
+landing/php/vendor
+landing/php/.env

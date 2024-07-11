@@ -1,28 +1,71 @@
 <?php
 
-include "authentication.php";
-include "res.php";
+include_once "authentication.php";
+include_once "res.php";
 
 $user = isAuthenticated();
 if (!($user instanceof User)) {
-    header("Content-Type: application/json");
-    http_response_code($user["code"]);
-    echo json_encode(["error" => $user["error"]]);
-    return;
+  return res(401, ["error" => $user["error"]]);
 }
 
-// Get all emails and images except the current user's
-$stmt = $conn->prepare("SELECT email, imageURL FROM users WHERE email != ?");
-$stmt->bind_param("s", $user->email);
-$stmt->execute();
-$result = $stmt->get_result();
+function get($db, $user)
+{
+  $action = isset($_GET["action"]) ? $_GET["action"] : null;
+  switch ($action) {
+    case "me":
+      return res(200, [
+        "success" => true,
+        "me" => [ // without password
+          "id" => $user->id,
+          "name" => $user->name,
+          "email" => $user->email,
+          "imageURL" => (filter_var($user->imageURL, FILTER_VALIDATE_URL) ? $user->imageURL : ('../../users/php/images/' . $user->imageURL)),
+          "type" => $user->type,
+          "createdAt" => $user->createdAt,
+        ]
+      ]);
 
-$members = [];
-while ($row = $result->fetch_assoc()) {
-    $members[] = $row;
+    default:
+      // get all emails and images except mine
+      $stmt = $db->prepare("SELECT id, name, email, imageURL FROM users WHERE id != ? and type = 0");
+      $stmt->bind_param("i", $user->id);
+      $res = $stmt->execute();
+      if (!$res)
+        return res(500, ["error" => $stmt->error]);
+      $res = $stmt->get_result();
+      if (!$res->num_rows)
+        return res(404, ["error" => "No users found"]);
+      $members = [];
+      while ($row = $res->fetch_assoc()) {
+        // quick patch for image URLs 
+        if (isset($row["imageURL"])) {
+          $row["imageURL"] = (filter_var($row["imageURL"], FILTER_VALIDATE_URL)
+            ? $row["imageURL"]
+            : imageToBase64('../../users/php/images/' . $row["imageURL"]));
+        }
+        $members[] = $row;
+      }
+      return res(200, $members);
+  }
 }
 
-echo json_encode($members);
+//
 
-$stmt->close();
-$conn->close();
+$db = mysqli_connect("localhost", "root", "", "convoconnect", 3306);
+if (!$db) {
+  return res(500, ["error" => "Connection failed: " . mysqli_connect_error()]);
+}
+
+$method = $_SERVER["REQUEST_METHOD"];
+switch ($method) {
+  case "GET":
+    get($db, $user);
+    break;
+  // case "POST":
+  //   post($db, $user);
+  //   break;
+  default:
+    res(405, null, "text/plain");
+}
+
+$db->close();

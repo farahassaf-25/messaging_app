@@ -22,6 +22,9 @@
   --shadow-params-hover: 0 4px 10px 5px var(--color-shadow);
   --shadow-params-active: 0 4px 5px var(--color-shadow);
 }
+
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
 ::-moz-selection,
 ::selection {
   color: var(--color-background);
@@ -32,7 +35,7 @@ body {
 }
 body * {
   color: var(--color-text);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Rubik", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 12pt;
 }
 
@@ -59,7 +62,10 @@ textarea {
   color: var(--color-primary);
 
   transition: color 0.05s ease-in, border-color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out,
-    transform 0.1s ease-out;
+    transform 0.3s ease-out;
+}
+button > i {
+  color: var(--color-primary);
 }
 button:hover,
 input:hover,
@@ -75,11 +81,22 @@ textarea:focus {
   border-color: var(--color-primary);
 }
 
+/* Only for input that is default or text: */
+input:not([type]):focus,
+input[type="text"]:focus,
+textarea:focus {
+  transform: translate(0, 0);
+  box-shadow: var(--shadow-params);
+}
+
 button:active,
 input:active,
 textarea:active {
   transform: translate(0, 0);
   box-shadow: var(--shadow-params-active);
+
+  transition: color 0.05s ease-in, border-color 0.1s ease-out, background-color 0.1s ease-out, box-shadow 0.1s ease-out,
+    transform 0.1s ease-out;
 }
 input:active,
 textarea:active {
@@ -98,11 +115,43 @@ input[type="checkbox"]:checked {
   background-color: var(--color-primary);
 }
 
+button.red,
+input.red,
+textarea.red {
+  color: var(--color-error);
+}
+button.red > i {
+  color: var(--color-error);
+}
+button.red:hover,
+input.red:hover,
+textarea.red:hover {
+  border-color: var(--color-error);
+}
+button.red:focus,
+input.red:focus,
+textarea.red:focus {
+  border-color: var(--color-error);
+}
+button.red:active {
+  background-color: var(--color-error);
+}
+button.red:active > i,
+button.red:active {
+  color: var(--color-surface);
+}
+input[type="checkbox"].red:checked {
+  background-color: var(--color-error);
+}
+
 button.colored,
 input.colored,
 textarea.colored {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
+  color: var(--color-surface);
+}
+button.colored > i {
   color: var(--color-surface);
 }
 
@@ -124,6 +173,7 @@ textarea.colored:active {
   border-color: var(--color-text);
   color: var(--color-text);
 }
+button.colored:active > i,
 button.colored:active {
   background-color: var(--color-surface);
 }
@@ -132,11 +182,49 @@ button.colored:active {
   color: var(--color-primary);
 }
 
+button.colored.red,
+input.colored.red,
+textarea.colored.red {
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+  color: var(--color-surface);
+}
+button.colored.red > i {
+  color: var(--color-surface);
+}
+
+button.colored.red:hover,
+input.colored.red:hover,
+textarea.colored.red:hover {
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+}
+input.colored.red:focus,
+textarea.colored.red:focus {
+  border-color: var(--color-error);
+  background-color: var(--color-surface);
+  color: var(--color-error);
+}
+input.colored.red:active,
+textarea.colored.red:active {
+  background-color: var(--color-surface);
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+button.colored.red:active > i,
+button.colored.red:active {
+  background-color: var(--color-surface);
+}
+button.colored.red:active > i,
+button.colored.red:active {
+  color: var(--color-error);
+}
+
 #liveAlertPlaceholder {
+  z-index: 9999;
   position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 1050;
   width: auto;
   max-width: 300px;
 }
@@ -149,4 +237,37 @@ button.colored:active {
 
 .alert-dismissible:hober {
   box-shadow: var(--shadow-params-hover);
+}
+
+.pfp {
+  border-radius: 50%;
+  padding: 1px;
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  background-color: var(--color-surface);
+}
+.pfp.big {
+  width: 64px;
+  height: 64px;
+}
+.pfp.huge {
+  width: 96px;
+  height: 96px;
+}
+
+/*? Why? Clickable element that looks normal but then turns into something clickable on hover */
+.clickable {
+  cursor: pointer;
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, background-color 0.3s ease-out;
+}
+.clickable:hover {
+  box-shadow: var(--shadow-params-hover);
+  background-color: var(--color-background);
+  transform: translate(0, -2px);
+}
+.clickable:active {
+  box-shadow: var(--shadow-params-active);
+  transform: translate(0, 2px);
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out, background-color 0.3s ease-out;
 }

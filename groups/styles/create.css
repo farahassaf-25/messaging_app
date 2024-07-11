@@ -1,3 +1,10 @@
+body {
+  display: flex;
+}
+body > .screen {
+  flex: 1;
+}
+
 #createGroupBox {
   display: flex;
   flex-wrap: nowrap;
@@ -8,27 +15,74 @@
   justify-items: center;
   gap: 20px;
 }
-@media (width < 800px) {
-  #createGroupBox {
-    flex-wrap: wrap !important;
-  }
-}
-#createGroupBox #groupInfo {
+#groupInfo {
+  height: 100%;
   padding: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
 }
-#createGroupBox #groupNameBox {
+#createGroupBox > .usersContainerWrapper {
+  height: 100%;
+}
+@media (width < 800px) {
+  #createGroupBox {
+    flex-wrap: wrap !important;
+  }
+  #createGroupBox > .usersContainerWrapper {
+    height: auto;
+  }
+  #groupInfo {
+    height: auto;
+  }
+}
+#groupInfo .groupImage {
+  position: relative;
+}
+#imageURLPreview,
+#groupInfo .groupImage > img {
+  z-index: 0;
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  background-color: var(--color-surface);
+  box-shadow: 0 4px 10px 2px var(--color-shadow);
+}
+
+#groupInfo .groupImage > .editContainer {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+
+  background-color: var(--color-shadow);
+  backdrop-filter: blur(5px);
+
+  opacity: 0;
+
+  transition: opacity 0.3s ease-out;
+}
+#groupInfo .groupImage:hover > .editContainer {
+  opacity: 1;
+}
+
+#groupNameBox {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-#createGroupBox .pfp,
-#createGroupBox #mypfp {
+#imageURLPreview,
+#createGroupBox .pfp {
   border-radius: 50%;
 }
 #createGroupBox .pfp {
@@ -37,17 +91,21 @@
   height: 32px;
   background-color: var(--color-surface);
 }
-#createGroupBox #mypfp {
-  width: 180px;
-  height: 180px;
-  background-color: var(--color-surface);
-  box-shadow: 0 4px 10px 2px var(--color-shadow);
-}
-#createGroupBox #membersList {
+#membersList {
   display: flex;
   flex-direction: column;
   justify-content: stretch;
   gap: 8px;
   padding: 16px;
   border-radius: var(--border-radius);
+}
+
+#imageURLModal .modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+#imageURLModal .modal-body > input {
+  width: 75%;
 }

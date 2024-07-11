@@ -1,0 +1,6 @@
+// This will enable jquery linting in vscode (auto complete..etc..)
+{
+  "typeAcquisition": {
+    "include": ["jquery"]
+  }
+}

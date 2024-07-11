@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once "../../../common/php/authentication.php";
+require_once "../../../common/php/authentication.php";
 
 $errors = [];
 

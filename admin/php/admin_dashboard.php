@@ -1,6 +1,6 @@
 <?php
 
-include_once "../common/php/authentication.php";
+require_once "../common/php/authentication.php";
 
 $query = "SELECT users.id, users.name, users.email, feedback.feedback_id 
           FROM users 
@@ -17,7 +17,6 @@ $sqlreports = "SELECT report_id, reporter_id, reported_id, report FROM reports";
 $stmttotalfeedback = "SELECT COUNT(*) as total_feedback FROM feedback";
 $resfeedback = $conn->query($stmttotalfeedback);
 
-// Execute queries
 $result = $conn->query($query);
 $resultadmin = $conn->query($sqladmin);
 $resuser = $conn->query($stmt);

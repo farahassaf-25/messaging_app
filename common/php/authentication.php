@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . '/models/User.php';
-include_once "db.php";
+include "db.php";
 
 /** Authenticate user by email and password */
 function authenticateUser($email, $password, $type)
@@ -49,12 +49,15 @@ function registerUser($name, $email, $password, $type)
     return $success;
 }
 
+/** Check whether the user is authenticated and gets the user or an error object 
+ * @return array | User object containing error and status code or the {User} if authenticated
+ */
 function isAuthenticated()
 {
     //TODO: THIS RETURN IS FOR TESTING ONLY
     //// non-admin in group ID=15
-    //return new User(27, 'david.thomas@example.com', 'catlover', 'David Thomas', 'https://cataas.com/cat?bust=718.607203772857&width=64&height=64', 0, '2024-06-15 12:06:24');
-    return new User(909090, "example@domain.com", "pass", "example", "https://cataas.com/cat?size=64", 0, date('Y-m-d H:i:s'),);
+    // return new User(21, 'john.doe@example.com', 'password123', 'John Doe', 'https://cataas.com/cat?bust=963.2623511955723&width=64&height=64', 0, '2024-06-15 12:06:24');
+    return new User(1, "example@domain.com", "pass", "example", "https://cataas.com/cat?size=64", 0, date('Y-m-d H:i:s'));
 
     if (isset($_SESSION['user'])) {
         return $_SESSION['user'];

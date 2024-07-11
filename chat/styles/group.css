@@ -1,0 +1,108 @@
+body {
+  display: flex;
+}
+.screens {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex: 1;
+  gap: 16px;
+  margin: 16px;
+}
+.screens .side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 350px;
+}
+.screens .side .screen {
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 300px;
+  margin: 0;
+}
+.screens .side .title {
+  font-size: large;
+  margin: 0;
+  font-weight: bold;
+  color: var(--color-text-disabled);
+  padding: 8px 16px;
+}
+.screen.chat {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+.screen.chat .header {
+  display: flex;
+  justify-items: center;
+  border-radius: 32px;
+  cursor: pointer;
+  padding: 2px;
+  margin: 8px 16px 0 16px;
+}
+
+.screen.chat .header .name {
+  font-weight: bold;
+  font-size: large;
+}
+.screen.chat .header .pfp {
+  box-shadow: var(--shadow-params);
+}
+.screen.chat .header + hr {
+  padding: 0;
+  margin: 4px 0 8px 0;
+}
+.screen.chat .header .groupInfo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.screen.chat .body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 8px;
+  margin: 0 16px 8px 16px;
+}
+.screen.chat .footer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-background);
+  border-radius: var(--border-radius);
+  padding: 8px;
+  box-shadow: var(--shadow-params);
+}
+.screen.chat .footer input {
+  flex: 1;
+  padding: 12px 8px 12px 48px;
+}
+.screen.chat .footer .attachButton {
+  z-index: 10;
+  border-radius: var(--border-radius);
+  padding: 12px 14px 12px 16px;
+  color: var(--color-surface-muted);
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@media (width < 800px) {
+  .screens {
+    flex-direction: column;
+  }
+  /* Hide screens that aren't chat */
+  .screens > :not(.chat) {
+    display: none;
+  }
+}

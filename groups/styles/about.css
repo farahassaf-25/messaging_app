@@ -1,17 +1,137 @@
-@media (width: 800px) {
-  #aboutGroupBox {
-    flex-direction: column;
-  }
+body {
+  display: flex;
+}
+body > .screen {
+  flex: 1;
+}
+
+#groupName {
+  font-size: larger;
+  font-weight: bold;
+}
+#groupNameBox > label {
+  flex: 1;
+}
+
+#aboutGroupBox {
+  display: flex;
+  /* flex-wrap: wrap; */
+  flex-direction: row;
+  overflow: scroll;
+  align-items: center;
+  /* justify-content: center; */
+  justify-items: center;
+  gap: 20px;
 }
 #groupInfo {
   flex: 1;
   width: 100%;
+  height: 100%;
+  /* max-height: calc(95vh - 128px); */
+  overflow: scroll;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
-#groupNameBox {
-  flex: 1;
+#groupInfo > .usersContainerWrapper {
+  height: 50%;
+}
+#aboutGroupBox > .usersContainerWrapper {
+  height: calc(100vh - 128px);
+}
+@media (width < 800px) {
+  #aboutGroupBox {
+    display: block;
+  }
+  #aboutGroupBox > .usersContainerWrapper {
+    height: auto;
+  }
+  #groupInfo > .usersContainerWrapper {
+    height: auto;
+  }
+  #groupInfo {
+    height: auto;
+  }
+}
+
+#groupInfo .groupImageBox {
+  position: relative;
+}
+#imageURLPreview,
+#groupInfo .groupImageBox > img {
+  z-index: 0;
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  background-color: var(--color-surface);
+  box-shadow: 0 4px 10px 2px var(--color-shadow);
+}
+
+.editContainer.hidden {
+  display: none !important;
+}
+/* group image edit button */
+#groupInfo .groupImageBox > .editContainer {
   display: flex;
   align-items: center;
+  justify-content: center;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--color-shadow);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
 }
-#groupNameBox > label {
+#groupInfo .groupImageBox:hover > .editContainer {
+  opacity: 1;
+}
+
+#groupNameBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#membersList {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  gap: 8px;
+  padding: 16px;
+  border-radius: var(--border-radius);
+}
+
+#editGroupModal .modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+#editGroupModal .modal-body > input {
+  width: 75%;
+}
+#editGroupModal .modal-body > .horizontal {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+#editGroupModal .modal-body > .horizontal > .big {
   flex: 1;
+}
+#groupInfo .hidable {
+  max-width: 100%;
+  transition: max-width 0.3s ease-out;
+}
+#groupInfo .hidable.hidden {
+  max-width: 0%;
 }
